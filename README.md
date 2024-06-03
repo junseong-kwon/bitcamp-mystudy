@@ -1,3 +1,3 @@
 # bitcamp-mystudy
 
-okok
+holy shit
