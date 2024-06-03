@@ -1,5 +1,8 @@
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 8c6e75156aea5073f06be0073f03ea783baf4424
 plugins {
     id 'java'
 }
@@ -20,7 +23,13 @@ java {
     }
 }
 
+<<<<<<< HEAD
 
 tasks.named('test') {
     useJUnitPlatform()
 }
+=======
+tasks.named('test') {
+    useJUnitPlatform()
+}
+>>>>>>> 8c6e75156aea5073f06be0073f03ea783baf4424

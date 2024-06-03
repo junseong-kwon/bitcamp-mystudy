@@ -10,9 +10,13 @@
 
 class Test6 {
     public static void main(String[] args) {
+<<<<<<< HEAD
         for (int i = 0; i < args.length; i++) {
             System.out.println("'" + args[i] + "'");
         }
 
+=======
+        // 코드를 완성하시오!
+>>>>>>> 8c6e75156aea5073f06be0073f03ea783baf4424
     }
 }
