@@ -1,21 +1,4 @@
-<<<<<<< HEAD
-class Test4 {
-    static void main(String[] a) {
 
-    }
-
-=======
-// 실습
-// - 컴파일하고 실행하라.
-//
-// 결과 및 설명
-// - 실행 오류가 발생한다.
-// - main() 메서드의 형식이 옳지 않다.
-//      public static void main(String[] a) {}
-//
-
-class Test4 {
-    static void main(String[] a) {
-    }
->>>>>>> 8c6e75156aea5073f06be0073f03ea783baf4424
+public class Test4 {
+  public static float f1 = 12.375f;
 }
