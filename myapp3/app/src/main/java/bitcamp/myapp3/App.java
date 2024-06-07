@@ -11,14 +11,14 @@ public class App {
         String red = "\033[31m";
         String menuDelimiter = "------------------------------";
         String menuTitle = "[팀 프로젝트 관리 시스템]";
-        String[] menuItems = {"회원", "팀", "프로젝트", "게시판", "도움말", "종료"};
+        String[] menuItems = {"회원", "팀", "프로젝트", "게시판", "도움말"};
 
         System.out.println(bold + menuDelimiter);
         System.out.println(menuTitle + del);
         for (String menuItem : menuItems) {
             System.out.println(menuItem);
         }
-        System.out.println(bold + red + "6. 종료" + del);
+        System.out.println(bold + red + "종료" + del);
         System.out.println(bold + menuDelimiter + del);
 
         boolean isRunning = true;
@@ -28,7 +28,7 @@ public class App {
 
             switch (input) {
                 case "1":
-                    System.out.println("회원");
+             1       System.out.println("회원");
                     break;
                 case "2":
                     System.out.println("팀");
@@ -43,7 +43,8 @@ public class App {
                     System.out.println("도움말");
                     break;
                 case "6":
-                    isRunning = false; // 반복문 종료
+                    isRunning = false; //
+                    System.out.println("종료합니다");// 반복문 종료
                     break;
                 default:
                     System.out.println("메뉴 번호가 옳지 않습니다.");
@@ -51,7 +52,7 @@ public class App {
             }
 
             System.out.println();
-            System.out.println("종료");
+
         }
 
         keyboardScanner.close(); // Scanner 닫기
