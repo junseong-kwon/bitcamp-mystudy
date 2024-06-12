@@ -18,25 +18,26 @@ public class App {
 
     public static void main(String[] args) {
 
-        printMenu(); // 메서드에 묶인 코드를 실행하는 것을 "메서드를 호출(call)한다"라고 부른다.
+        printMenu();
+
 
         String command;
         while (true) {
+            command = promft();
             try {
-                command = prompt();
 
                 if (command.equals("menu")) {
                     printMenu();
 
                 } else {
                     int menuNo = Integer.parseInt(command);
-                    String menuTitle = getMenuTitle(menuNo); // 설명하는 변수
+                    String menuTitle = getMenuTitle(menuNo);
                     if (menuTitle == null) {
                         System.out.println("유효한 메뉴 번호가 아닙니다.");
-                    } else if (menuTitle.equals("종료")) {
-                        break;
+                    } else if  (menuTitle.equals("종료")){
+                            break;
                     } else {
-                        System.out.println(menuTitle);
+                        System.out.println("유효한 메뉴 번호가 아닙니다.");
                     }
                 }
             } catch (NumberFormatException ex) {
@@ -48,7 +49,6 @@ public class App {
 
         keyboardScanner.close();
     }
-
     static void printMenu() {
         String boldAnsi = "\033[1m";
         String redAnsi = "\033[31m";
@@ -70,23 +70,14 @@ public class App {
 
         System.out.println(boldAnsi + line + resetAnsi);
     }
-
-    static String prompt() {
+    static String promft() {
         System.out.print("> ");
         return keyboardScanner.nextLine();
     }
-
     static boolean isValidateMenu(int menuNo) {
         return menuNo >= 1 && menuNo <= menus.length;
     }
-
     static String getMenuTitle(int menuNo) {
-//        if (isValidateMenu(menuNo)) {
-//            return menus[menuNo - 1];
-//        }
-//        return null;
-
         return isValidateMenu(menuNo) ? menus[menuNo - 1] : null;
     }
-
 }
