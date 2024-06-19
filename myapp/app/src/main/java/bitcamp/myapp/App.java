@@ -1,10 +1,14 @@
 package bitcamp.myapp;
 
+import bitcamp.myapp.command.BoardCommand;
+import bitcamp.myapp.command.ProjectCommand;
+import bitcamp.myapp.command.UserCommand;
+import bitcamp.myapp.util.Prompt;
 
 public class App {
 
 
-  static String[] mainMenus = new String[]{"회원", "팀", "프로젝트", "게시판", "도움말", "종료"};
+  static String[] mainMenus = new String[]{"회원", "프로젝트", "게시판", "도움말", "종료"};
   static String[][] subMenus = {
       {"등록", "목록", "조회", "변경", "삭제"},
       {"등록", "목록", "조회", "변경", "삭제"},
@@ -33,7 +37,7 @@ public class App {
           } else if (menuTitle.equals("종료")) {
             break;
           } else {
-            if (menuNo >= 1 && menuNo <= 4) {
+            if (menuNo >= 1 && menuNo <= 3) {
               processMenu(menuTitle, subMenus[menuNo - 1]);
             } else {
               System.out.println(menuTitle);
@@ -46,9 +50,8 @@ public class App {
     }
 
     System.out.println("종료합니다.");
+
     Prompt.close();
-
-
   }
 
   static void printMenu() {
@@ -56,7 +59,7 @@ public class App {
     String redAnsi = "\033[31m";
     String resetAnsi = "\033[0m";
 
-    String appTitle = "[팀 프로젝트 관리 시스템]";
+    String appTitle = "[프로젝트 관리 시스템]";
     String line = "----------------------------------";
 
     System.out.println(boldAnsi + line + resetAnsi);
@@ -64,8 +67,7 @@ public class App {
 
     for (int i = 0; i < mainMenus.length; i++) {
       if (mainMenus[i].equals("종료")) {
-        System.out.printf("%s%d. %s%s\n", (boldAnsi + redAnsi), (i + 1), mainMenus[i],
-            resetAnsi);
+        System.out.printf("%s%d. %s%s\n", (boldAnsi + redAnsi), (i + 1), mainMenus[i], resetAnsi);
       } else {
         System.out.printf("%d. %s\n", (i + 1), mainMenus[i]);
       }
@@ -111,14 +113,11 @@ public class App {
             case "회원":
               UserCommand.executeUserCommand(subMenuTitle);
               break;
-            case "팀":
-              executeTeamCommand(subMenuTitle);
-              break;
             case "프로젝트":
-              executeProjectCommand(subMenuTitle);
+              ProjectCommand.executeProjectCommand(subMenuTitle);
               break;
             case "게시판":
-              executeBoardCommand(subMenuTitle);
+              BoardCommand.executeBoardCommand(subMenuTitle);
               break;
             default:
               System.out.printf("%s 메뉴의 명령을 처리할 수 없습니다.\n", menuTitle);
@@ -130,18 +129,7 @@ public class App {
     }
   }
 
-
-  static void executeTeamCommand(String command) {
-    System.out.printf("팀 %s\n", command);
-  }
-
-  static void executeProjectCommand(String command) {
-    System.out.printf("프로젝트 %s\n", command);
-  }
-
   static void executeBoardCommand(String command) {
     System.out.printf("게시판 %s\n", command);
   }
-
 }
-
