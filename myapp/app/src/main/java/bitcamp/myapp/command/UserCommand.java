@@ -1,11 +1,12 @@
 package bitcamp.myapp.command;
 
+import bitcamp.myapp.util.LinkedList;
 import bitcamp.myapp.util.Prompt;
 import bitcamp.myapp.vo.User;
 
 public class UserCommand {
 
-  UserList userList = new UserList();
+  LinkedList userList = new LinkedList();
 
   public void executeUserCommand(String command) {
     System.out.printf("[%s]\n", command);
@@ -49,7 +50,7 @@ public class UserCommand {
 
   private void viewUser() {
     int userNo = Prompt.inputInt("회원번호?");
-    User user = this.userList.findByNo(userNo);
+    User user = (User) userList.get(userList.indexOf(new User(userNo)));
     if (user == null) {
       System.out.println("없는 회원입니다.");
       return;
@@ -62,7 +63,7 @@ public class UserCommand {
 
   private void updateUser() {
     int userNo = Prompt.inputInt("회원번호?");
-    User user = userList.findByNo(userNo);
+    User user = (User) userList.get(userList.indexOf(new User(userNo)));
     if (user == null) {
       System.out.println("없는 회원입니다.");
       return;
@@ -77,7 +78,7 @@ public class UserCommand {
 
   private void deleteUser() {
     int userNo = Prompt.inputInt("회원번호?");
-    User deletedUser = userList.findByNo(userNo);
+    User deletedUser = (User) userList.get(userList.indexOf(new User(userNo)));
 
     if (deletedUser != null) {
       userList.remove(userList.indexOf(deletedUser));
@@ -87,7 +88,7 @@ public class UserCommand {
     }
   }
 
-  public UserList getUserList() {
+  public LinkedList getUserList() {
     return userList;
   }
 }

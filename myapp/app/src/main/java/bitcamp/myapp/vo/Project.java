@@ -1,6 +1,7 @@
 package bitcamp.myapp.vo;
 
-import bitcamp.myapp.command.ArrayList;
+import bitcamp.myapp.util.ArrayList;
+import java.util.Objects;
 
 public class Project {
 
@@ -12,10 +13,34 @@ public class Project {
   private String startDate;
   private String endDate;
   private ArrayList members = new ArrayList();
-  private int memberSize;
+
+  public Project() {
+
+  }
+
+  public Project(int no) {
+    this.no = no;
+  }
 
   public static int getNextSeqNo() {
     return ++seqNo;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    Project project = (Project) o;
+    return no == project.no;
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hashCode(no);
   }
 
   public int getNo() {
