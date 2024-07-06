@@ -1,10 +1,9 @@
 package bitcamp.myapp.util;
 
-public class LinkedList implements List {
+public class LinkedList extends AbstractList {
 
-  Node first;
-  Node last;
-  int size;
+  private Node first;
+  private Node last;
 
 
   @Override
@@ -23,7 +22,7 @@ public class LinkedList implements List {
   @Override
   public Object get(int index) {
     if (index < 0 || index >= size) {
-      throw null;
+      return null;
     }
 
     Node cursor = first;
@@ -105,14 +104,21 @@ public class LinkedList implements List {
     return arr;
   }
 
-  @Override
-  public int size() {
-    return size;
+  // 1) 스태틱 중첩 클래스
+  // 2) 이 안에서 쓰기 때문에 중첩 클래스를 둔다
+  // 3) 다른 메서드 참조하지 않으면 static을 사용한다.
+
+  private static class Node {
+
+    Object value;
+    Node next;
+
+    public Node(Object value) {
+      this.value = value;
+    }
+
   }
 
-
 }
-
-
 
 

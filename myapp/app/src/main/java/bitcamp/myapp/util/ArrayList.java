@@ -2,13 +2,13 @@ package bitcamp.myapp.util;
 
 import java.util.Arrays;
 
-public class ArrayList implements List { // implements List 이것이 인터페이스 선언 {
+public class ArrayList extends AbstractList { // implements List 이것이 인터페이스 선언 {
 
   private static final int MAX_SIZE = 3;
 
 
   private Object[] list = new Object[MAX_SIZE];
-  private int size = 0;
+
 
   @Override // 재정의 또는 추상메서드 구현을 의미한다.
   public void add(Object obj) {
@@ -69,10 +69,6 @@ public class ArrayList implements List { // implements List 이것이 인터페�
     return -1;
   }
 
-  @Override
-  public int size() {
-    return size;
-  }
 
   @Override
   public Object get(int index) {

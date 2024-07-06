@@ -9,7 +9,7 @@ import java.util.Date;
 public class BoardCommand {
 
   LinkedList boardList = new LinkedList();
-
+  
 
   public void executeBoardCommand(String command) {
     System.out.printf("[%s]\n", command);
