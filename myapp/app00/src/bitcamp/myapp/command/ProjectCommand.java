@@ -1,29 +1,57 @@
 package bitcamp.myapp.command;
 
-import bitcamp.myapp.util.List;
+import bitcamp.myapp.util.LinkedList;
 import bitcamp.myapp.util.Prompt;
 import bitcamp.myapp.vo.Project;
 import bitcamp.myapp.vo.User;
 
-public class ProjectCommand extends AbstractCommand {
+public class ProjectCommand implements Command {
 
-  private List projectList;
-  private List userList;
-  private String[] menus = {"등록", "목록", "조회", "변경", "삭제"};
 
-  public ProjectCommand(String menuTitle, List projectList, List userList) {
-    super(menuTitle);
-    this.projectList = projectList;
+  String menuTitle;
+  String[] menus = {"등록", "목록", "조회", "변경", "삭제"};
+  LinkedList projectList = new LinkedList();
+  LinkedList userList;
+
+  public ProjectCommand(String menuTitle,LinkedList userList) {
+    this.menuTitle = menuTitle;
     this.userList = userList;
   }
 
-  @Override
-  protected String[] getMenus() {
-    return menus;
+  public void execute() {
+    printMenu();
+    while (true) {
+      String command = Prompt.input(String.format("메인/%s>", menuTitle));
+      if (command.equals("menu")) {
+        printMenu();
+        continue;
+      } else if (command.equals("9")) { // 이전 메뉴 선택
+        break;
+      }
+
+      try {
+        int menuNo = Integer.parseInt(command);
+        String menuName = getMenuTitle(menuNo);
+        if (menuName == null) {
+          System.out.println("유효한 메뉴 번호가 아닙니다.");
+          continue;
+        }
+      } catch (NumberFormatException ex) {
+        System.out.println("숫자로 메뉴 번호를 입력하세요.");
+      }
+    }
   }
 
-  @Override
-  protected void processMenu(String menuName) {
+  private void printMenu(){
+
+    System.out.printf("[%s]\n", menuTitle);
+    for (int i = 0; i < menus.length; i++) {
+      System.out.printf("%d. %s\n", (i + 1), menus[i]);
+    }
+    System.out.println("9. 이전");
+  }
+
+  public void processMenu(String menuName) {
     System.out.printf("[%s]\n", menuName);
     switch (menuName) {
       case "등록":
@@ -43,7 +71,13 @@ public class ProjectCommand extends AbstractCommand {
         break;
     }
   }
+  private boolean isValidateMenu(int menuNo) {
+    return menuNo >= 1 && menuNo <= menus.length;
+  }
 
+  private String getMenuTitle(int menuNo) {
+    return isValidateMenu(menuNo) ? menus[menuNo - 1] : null;
+  }
 
   private void addMembers(Project project) {
     while (true) {
@@ -69,19 +103,18 @@ public class ProjectCommand extends AbstractCommand {
   }
 
   private void deleteMembers(Project project) {
-    Object[] members = project.getMembers().toArray();
-    for (Object obj : members) {
-      int index = project.getMembers().indexOf(obj);
-      User member = (User) obj;
-      String str = Prompt.input("팀원(%s) 삭제?", member.getName());
+    for (int i = 0; i < project.getMembers().size(); i++) {
+      User user = (User) project.getMembers().get(i);
+      String str = Prompt.input("팀원(%s) 삭제?", user.getName());
       if (str.equalsIgnoreCase("y")) {
-        project.getMembers().remove(index);
-        System.out.printf("'%s' 팀원을 삭제합니다.\n", member.getName());
+        project.getMembers().remove(i);
+        System.out.printf("'%s' 팀원을 삭제합니다.\n", user.getName());
       } else {
-        System.out.printf("'%s' 팀원을 유지합니다.\n", member.getName());
+        System.out.printf("'%s' 팀원을 유지합니다.\n", user.getName());
       }
     }
   }
+
 
 
   private void addProject() {
