@@ -3,7 +3,6 @@ package bitcamp.myapp.util;
 public class Queue extends LinkedList {
 
   public static void main(String[] args) {
-
     Queue q = new Queue();
     q.offer("111");
     q.offer("222");

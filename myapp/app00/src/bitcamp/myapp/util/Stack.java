@@ -12,6 +12,7 @@ public class Stack extends LinkedList {
     System.out.println(s.pop());
     System.out.println(s.pop());
     System.out.println(s.pop());
+
   }
 
   public void push(Object value) {

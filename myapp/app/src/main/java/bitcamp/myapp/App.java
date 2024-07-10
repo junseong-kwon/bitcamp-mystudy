@@ -1,18 +1,18 @@
 package bitcamp.myapp;
 
-
 import bitcamp.myapp.command.BoardCommand;
 import bitcamp.myapp.command.Command;
 import bitcamp.myapp.command.HelpCommand;
 import bitcamp.myapp.command.HistoryCommand;
 import bitcamp.myapp.command.ProjectCommand;
 import bitcamp.myapp.command.UserCommand;
-import bitcamp.myapp.util.ArrayList;
-import bitcamp.myapp.util.List;
 import bitcamp.myapp.util.Prompt;
-import bitcamp.myapp.util.Stack;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.Stack;
 
 public class App {
 
@@ -20,22 +20,20 @@ public class App {
   String[] menus = {"회원", "프로젝트", "게시판", "도움말", "명령내역", "종료"};
   Stack menuPath = new Stack();
 
-
   Map<String, Command> commandMap = new HashMap<>();
-
 
   public App() {
     List userList = new ArrayList();
-    List projectList = new ArrayList();
-    List boardList = new ArrayList();
+    List projectList = new LinkedList();
+    List boardList = new LinkedList();
 
     commandMap.put("회원", new UserCommand("회원", userList));
     commandMap.put("게시판", new BoardCommand("게시판", boardList));
     commandMap.put("프로젝트", new ProjectCommand("프로젝트", projectList, userList));
     commandMap.put("도움말", new HelpCommand());
     commandMap.put("명령내역", new HistoryCommand());
-
   }
+
 
   public static void main(String[] args) {
     new App().execute();
@@ -43,6 +41,7 @@ public class App {
 
   void execute() {
     menuPath.push("메인");
+
     printMenu();
 
     String command;
@@ -114,14 +113,13 @@ public class App {
   }
 
   private String getMenuPathTitle(Stack menuPath) {
-    StringBuilder stringBuilder = new StringBuilder();
+    StringBuilder strBuilder = new StringBuilder();
     for (int i = 0; i < menuPath.size(); i++) {
-      if (stringBuilder.length() > 0) {
-        stringBuilder.append("/");
+      if (strBuilder.length() > 0) {
+        strBuilder.append("/");
       }
-      stringBuilder.append(menuPath.get(i));
+      strBuilder.append(menuPath.get(i));
     }
-    return stringBuilder.toString();
+    return strBuilder.toString();
   }
 }
-
