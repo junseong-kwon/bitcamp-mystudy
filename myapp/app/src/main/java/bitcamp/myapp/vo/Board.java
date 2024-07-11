@@ -14,9 +14,10 @@ public class Board {
   private int viewCount;
 
   public Board() {
+
   }
 
-  public Board(int No) {
+  public Board(int no) {
     this.no = no;
   }
 
@@ -81,4 +82,3 @@ public class Board {
     this.viewCount = viewCount;
   }
 }
-

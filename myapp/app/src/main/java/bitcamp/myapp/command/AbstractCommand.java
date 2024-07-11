@@ -7,14 +7,14 @@ public abstract class AbstractCommand implements Command {
 
   protected String menuTitle;
 
-
   public AbstractCommand(String menuTitle) {
     this.menuTitle = menuTitle;
   }
 
   @Override
-  public void execute(Stack menuPath) {
+  public void execute(Stack<String> menuPath) {
     menuPath.push(menuTitle);
+
     printMenus();
 
     while (true) {
@@ -63,22 +63,18 @@ public abstract class AbstractCommand implements Command {
   }
 
   private String getMenuPathTitle(Stack menuPath) {
-    StringBuilder stringBuilder = new StringBuilder();
+    StringBuilder strBuilder = new StringBuilder();
     for (int i = 0; i < menuPath.size(); i++) {
-      if (stringBuilder.length() > 0) {
-        stringBuilder.append("/");
+      if (strBuilder.length() > 0) {
+        strBuilder.append("/");
       }
-      stringBuilder.append(menuPath.get(i));
+      strBuilder.append(menuPath.get(i));
     }
-    return stringBuilder.toString();
+    return strBuilder.toString();
   }
 
-  //구체적인 동작은 서브 클래스에서 정의한다.
+  // 구체적인 동작은 서브 클래스에서 정의한다.
   protected abstract String[] getMenus();
 
   protected abstract void processMenu(String menuName);
 }
-
-
-
-

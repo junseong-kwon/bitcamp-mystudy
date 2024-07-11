@@ -7,6 +7,9 @@ import bitcamp.myapp.command.HistoryCommand;
 import bitcamp.myapp.command.ProjectCommand;
 import bitcamp.myapp.command.UserCommand;
 import bitcamp.myapp.util.Prompt;
+import bitcamp.myapp.vo.Board;
+import bitcamp.myapp.vo.Project;
+import bitcamp.myapp.vo.User;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -23,9 +26,9 @@ public class App {
   Map<String, Command> commandMap = new HashMap<>();
 
   public App() {
-    List userList = new ArrayList();
-    List projectList = new LinkedList();
-    List boardList = new LinkedList();
+    List<User> userList = new ArrayList<>();
+    List<Project> projectList = new LinkedList<>();
+    List<Board> boardList = new LinkedList<>();
 
     commandMap.put("회원", new UserCommand("회원", userList));
     commandMap.put("게시판", new BoardCommand("게시판", boardList));
