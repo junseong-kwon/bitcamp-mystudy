@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 
-public class User implements Serializable {
+public class User implements Serializable, SequenceNo {
 
   private static int seqNo;
 
@@ -81,6 +81,7 @@ public class User implements Serializable {
     return Objects.hashCode(no);
   }
 
+  @Override
   public int getNo() {
     return no;
   }
