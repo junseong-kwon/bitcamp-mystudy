@@ -28,13 +28,18 @@ import bitcamp.util.Prompt;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import java.io.BufferedReader;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class App {
 
@@ -161,10 +166,100 @@ public class App {
   }
 
   private void saveData() {
-    saveJson(userList, "user.json");
-    saveJson(projectList, "project.json");
-    saveJson(boardList, "board.json");
-    System.out.println("데이터를 저장 했습니다.");
+    try {
+      XSSFWorkbook workbook = new XSSFWorkbook();
+
+      saveUsers(workbook);
+      saveBoards(workbook);
+      saveProjects(workbook);
+
+      try (FileOutputStream out = new FileOutputStream("data.xlsx")) {
+        workbook.write(out);
+      }
+      System.out.println("데이터를 저장 했습니다.");
+
+    } catch (Exception e) {
+      System.out.println("데이터 저장 중 오류 발생!");
+      e.printStackTrace();
+    }
+  }
+
+  private void saveUsers(XSSFWorkbook workbook) {
+    XSSFSheet sheet = workbook.createSheet("users");
+
+    //셀 이름 출력
+    String[] cellHeaders = {"no", "name", "email", "password", "tel"};
+    Row headerRow = sheet.createRow(0);
+    for (int i = 0; i < cellHeaders.length; i++) {
+      headerRow.createCell(i).setCellValue(cellHeaders[i]);
+    }
+
+    // 데이터 저장
+    for (int i = 0; i < userList.size(); i++) {
+      User user = userList.get(i);
+      Row dataRow = sheet.createRow(i + 1);
+      dataRow.createCell(0).setCellValue(String.valueOf(user.getNo()));
+      dataRow.createCell(1).setCellValue(String.valueOf(user.getName()));
+      dataRow.createCell(2).setCellValue(String.valueOf(user.getEmail()));
+      dataRow.createCell(3).setCellValue(String.valueOf(user.getPassword()));
+      dataRow.createCell(4).setCellValue(String.valueOf(user.getTel()));
+    }
+  }
+
+  private void saveBoards(XSSFWorkbook workbook) {
+    XSSFSheet sheet = workbook.createSheet("boards");
+
+    //셀 이름 출력
+    String[] cellHeaders = {"no", "title", "content", "created_date", "view_count"};
+    Row headerRow = sheet.createRow(0);
+    for (int i = 0; i < cellHeaders.length; i++) {
+      headerRow.createCell(i).setCellValue(cellHeaders[i]);
+    }
+
+    // 데이터 저장
+    for (int i = 0; i < boardList.size(); i++) {
+      Board board = boardList.get(i);
+      Row dataRow = sheet.createRow(i + 1);
+      dataRow.createCell(0).setCellValue(String.valueOf(board.getNo()));
+      dataRow.createCell(1).setCellValue(String.valueOf(board.getTitle()));
+      dataRow.createCell(2).setCellValue(String.valueOf(board.getContent()));
+      SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+      dataRow.createCell(3).setCellValue(formatter.format(board.getCreatedDate()));
+
+      dataRow.createCell(4).setCellValue(String.valueOf(board.getViewCount()));
+    }
+  }
+
+  private void saveProjects(XSSFWorkbook workbook) {
+    XSSFSheet sheet = workbook.createSheet("projects");
+
+    //셀 이름 출력
+    String[] cellHeaders = {"no", "title", "description", "start_date", "end_date", "members"};
+    Row headerRow = sheet.createRow(0);
+    for (int i = 0; i < cellHeaders.length; i++) {
+      headerRow.createCell(i).setCellValue(cellHeaders[i]);
+    }
+
+    // 데이터 저장
+    for (int i = 0; i < projectList.size(); i++) {
+      Project project = projectList.get(i);
+      Row dataRow = sheet.createRow(i + 1);
+      dataRow.createCell(0).setCellValue(String.valueOf(project.getNo()));
+      dataRow.createCell(1).setCellValue(String.valueOf(project.getTitle()));
+      dataRow.createCell(2).setCellValue(String.valueOf(project.getDescription()));
+      dataRow.createCell(3).setCellValue(String.valueOf(project.getStartDate()));
+      dataRow.createCell(4).setCellValue(String.valueOf(project.getEndDate()));
+
+      StringBuilder strBuilder = new StringBuilder();
+      for (User member : project.getMembers()) {
+        if (strBuilder.length() > 0) {
+          strBuilder.append(",");
+        }
+        strBuilder.append(member.getNo());
+      }
+
+      dataRow.createCell(5).setCellValue(strBuilder.toString());
+    }
   }
 
   private void saveJson(Object obj, String filename) {
