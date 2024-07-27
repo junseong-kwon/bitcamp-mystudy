@@ -3,10 +3,12 @@ package bitcamp.myapp.vo;
 import java.io.Serializable;
 import java.util.Objects;
 
+// Serializable 인터페이스
+// - 추상 메서드가 없다.
+// - 직렬화/역직렬화를 승인한다는 표시로 사용한다.
+// - 유사한 예) Cloneable 인터페이스
+public class User implements Serializable {
 
-public class User implements Serializable, SequenceNo {
-
-  private static int seqNo;
 
   private int no;
   private String name;
@@ -21,48 +23,6 @@ public class User implements Serializable, SequenceNo {
     this.no = no;
   }
 
-  public static int getNextSeqNo() {
-    return ++seqNo;
-  }
-
-  public static void initSeqNo(int no) {
-    seqNo = no;
-  }
-
-  public static int getSeqNo() {
-    return seqNo;
-  }
-
-  public static User valueOf(String csv) {
-    String[] values = csv.split(","); //csv :"1. 홍길동, hong@test.com. 010-1111-2222"
-    User user = new User();
-    user.setNo(Integer.parseInt(values[0]));
-    user.setName(values[1]);
-    user.setEmail(values[2]);
-    user.setPassword(values[3]);
-    user.setTel(values[4]);
-    return user;
-  }
-
-
-  public String toCsvString() {
-    return new StringBuilder()
-        .append(no).append(",").append(name).append(",")
-        .append(email).append(",")
-        .append(password).append(",")
-        .append(tel).toString();
-  }
-
-  @Override
-  public String toString() {
-    return "User{" +
-        "tel='" + tel + '\'' +
-        ", no=" + no +
-        ", name='" + name + '\'' +
-        ", email='" + email + '\'' +
-        ", password='" + password + '\'' +
-        '}';
-  }
 
   @Override
   public boolean equals(Object o) {
@@ -81,7 +41,7 @@ public class User implements Serializable, SequenceNo {
     return Objects.hashCode(no);
   }
 
-  @Override
+
   public int getNo() {
     return no;
   }
