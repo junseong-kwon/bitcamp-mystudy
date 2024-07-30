@@ -7,6 +7,8 @@ import java.util.Objects;
 
 public class Project implements Serializable {
 
+  private static final long serialVersionUID = 1L;
+
   private int no;
   private String title;
   private String description;

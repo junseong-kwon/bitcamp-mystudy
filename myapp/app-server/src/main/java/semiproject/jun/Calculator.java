@@ -1,98 +1,99 @@
 package semiproject.jun;
 
 import java.util.Scanner;
-public static String[] menus = {"더하기", "빼기", "곱하기", "나누기", "숫자 확인", "종료"};
+
+interface Execute {
+
+}
+
 public class Calculator {
 
 
-
-
+  public static String[] menus = {"더하기", "빼기", "곱하기", "나누기", "숫자 확인", "종료"};
 
   static Scanner scanner = new Scanner(System.in);
-
-  private static int a = 10;
-  private static int b = 5;
-  private static int result = 0;
+  static int num1;
+  static int num2;
+  static int result;
 
   public static void main(String[] args) {
-    printMenu();
+    System.out.println("숫자를 입력하세요");
 
-    String command;
+    num1 = scanner.nextInt();
+    num2 = scanner.nextInt();
 
+    menu();
+    System.out.println("메뉴 선택해");
     while (true) {
       try {
-        command = promft();
-
-        if (command.equals("menu")) {
-          printMenu();
+        String choice = scanner.nextLine();
+        if (choice.equals("menu")) {
+          menu();
+          System.out.println("메뉴 선택해");
         } else {
-          int menuNo = Integer.parseInt(command);
-          String menuTitle = getMenuTitle(menuNo);
-
-          if (menuTitle == null) {
-            System.out.println("유효한 메뉴 번호가 아닙니다.");
-          } else if (menuTitle.equals("종료")) {
-            break;
-          } else {
-            System.out.println(menuTitle);
-            switch (menuNo) {
-              case 1:
-                plus();
-                break;
-              case 2:
-                break;
-              case 3:
-                break;
-              case 4:
-                break;
-              case 5:
-                break;
-              case 6:
-                break;
-
-            }
-
-
+          int goodchoice = Integer.parseInt(choice);
+          switch (goodchoice) {
+            case 1:
+              chaos.plus();
+              break;
+            case 2:
+              minus();
+              break;
+            case 3:
+              mutiple();
+              break;
+            case 4:
+              divine();
+              break;
+            case 5:
+              search();
+              break;
+            case 6:
+              return;
+            default:
+              System.out.println("제대로 된 것을 입력해라");
           }
         }
       } catch (Exception e) {
-        System.out.println("제대로 입력하세요");
+        System.out.println("오류 발생!");
+
       }
     }
   }
 
-  static void printMenu() {
+
+  static void minus() {
+    result = num1 - num2;
+    System.out.println(result);
+  }
+
+  static void mutiple() {
+    result = num1 * num2;
+    System.out.println(result);
+  }
+
+  static void divine() {
+    result = num1 / num2;
+    System.out.println(result);
+  }
+
+  static void menu() {
     for (int i = 0; i < menus.length; i++) {
-      if (menus[i].equals("종료")) {
-        System.out.printf("%d. %s\n", (i + 1), menus[i]);
-      } else {
-        System.out.printf("%d. %s\n", (i + 1), menus[i]);
-      }
+      System.out.printf("%d. %s\n", (i + 1), menus[i]);
+
     }
   }
 
-  static String promft() {
-    System.out.print("입력해봐: ");
-    return scanner.nextLine();
+
+  static void search() {
+    System.out.println("숫자1: " + num1 + ", 숫자2 : " + num2);
   }
 
-  static boolean isValidateMenu(int menuNo) {
-    return menuNo >= 1 && menuNo <= menus.length;
+  static class chaos {
+
+    static void plus() {
+      result = num1 + num2;
+      System.out.println(result);
+    }
   }
-
-  static String getMenuTitle(int menuNo) {
-    return isValidateMenu(menuNo) ? menus[menuNo - 1] : null;
-
-  }
-
-  public static int plus() {
-  f
-  }
-
-  public static void getResult() {
-    System.out.println("두 수의 연산결과는 다음과 같습니다.\n");
-    plus();
-
-  }
-
 }

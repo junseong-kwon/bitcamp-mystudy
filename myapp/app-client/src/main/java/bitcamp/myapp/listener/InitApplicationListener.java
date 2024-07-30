@@ -29,8 +29,6 @@ import bitcamp.myapp.dao.UserDao;
 import bitcamp.myapp.dao.stup.BoardDaoStup;
 import bitcamp.myapp.dao.stup.ProjectDaoStup;
 import bitcamp.myapp.dao.stup.UserDaoStup;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 
 public class InitApplicationListener implements ApplicationListener {
 
@@ -41,12 +39,12 @@ public class InitApplicationListener implements ApplicationListener {
   @Override
   public void onStrat(ApplicationContext ctx) throws Exception {
 
-    ObjectInputStream in = (ObjectInputStream) ctx.getAttribute("inputStream");
-    ObjectOutputStream out = (ObjectOutputStream) ctx.getAttribute("outputStream");
+    String host = (String) ctx.getAttribute("host");
+    int port = (int) ctx.getAttribute("port");
 
-    userDao = new UserDaoStup(in, out, "users");
-    boardDao = new BoardDaoStup(in, out, "boards");
-    projectDao = new ProjectDaoStup(in, out, "projects");
+    userDao = new UserDaoStup(host, port, "users");
+    boardDao = new BoardDaoStup(host, port, "boards");
+    projectDao = new ProjectDaoStup(host, port, "projects");
 
     MenuGroup mainMenu = ctx.getMainMenu();
 

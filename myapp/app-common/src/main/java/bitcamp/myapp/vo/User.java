@@ -9,6 +9,8 @@ import java.util.Objects;
 // - 유사한 예) Cloneable 인터페이스
 public class User implements Serializable {
 
+  private static final long serialVersionUID = 1L;
+
 
   private int no;
   private String name;

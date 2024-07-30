@@ -4,9 +4,6 @@ import bitcamp.context.ApplicationContext;
 import bitcamp.listener.ApplicationListener;
 import bitcamp.myapp.listener.InitApplicationListener;
 import bitcamp.util.Prompt;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,13 +31,9 @@ public class ClientApp {
 
   void execute() {
     try {
-      Socket socket = new Socket("127.0.0.1", 8888);
 
-      ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-      ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-
-      appCtx.setAttribute("inputStream", in);
-      appCtx.setAttribute("outputStream", out);
+      appCtx.setAttribute("host", Prompt.input("서버 주소?"));
+      appCtx.setAttribute("port", Prompt.inputInt("포트 번호?"));
 
       for (ApplicationListener listener : listeners) {
         try {
@@ -54,8 +47,6 @@ public class ClientApp {
 
       appCtx.getMainMenu().execute();
 
-      out.writeUTF("quit");
-      out.flush();
 
     } catch (Exception ex) {
       System.out.println("실행 오류!");
