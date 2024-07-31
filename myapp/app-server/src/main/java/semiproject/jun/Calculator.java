@@ -4,6 +4,8 @@ import java.util.Scanner;
 
 interface Execute {
 
+  void execute();
+
 }
 
 public class Calculator {
@@ -17,13 +19,14 @@ public class Calculator {
   static int result;
 
   public static void main(String[] args) {
-    System.out.println("숫자를 입력하세요");
-
+    System.out.print("첫번째 숫자를 입력하세요: ");
     num1 = scanner.nextInt();
+    System.out.print("두번쨰 숫자를 입력하세요: ");
     num2 = scanner.nextInt();
+    scanner.nextLine();
 
     menu();
-    System.out.println("메뉴 선택해");
+    System.out.print("메뉴 선택해: ");
     while (true) {
       try {
         String choice = scanner.nextLine();
@@ -56,7 +59,6 @@ public class Calculator {
         }
       } catch (Exception e) {
         System.out.println("오류 발생!");
-
       }
     }
   }
@@ -73,7 +75,7 @@ public class Calculator {
   }
 
   static void divine() {
-    result = num1 / num2;
+    double result = (double) num1 / (double) num2;
     System.out.println(result);
   }
 
