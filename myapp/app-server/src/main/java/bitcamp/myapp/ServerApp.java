@@ -27,12 +27,13 @@ public class ServerApp {
   public static void main(String[] args) {
     ServerApp app = new ServerApp();
 
-    app.addApplicationlistener(new InitApplicationListener());
+    // 애플리케이션이 시작되거나 종료될 때 알림 받을 객체의 연락처를 등록한다.
+    app.addApplicationListener(new InitApplicationListener());
 
     app.execute();
   }
 
-  private void addApplicationlistener(ApplicationListener listener) {
+  private void addApplicationListener(ApplicationListener listener) {
     listeners.add(listener);
   }
 
@@ -40,9 +41,9 @@ public class ServerApp {
     listeners.remove(listener);
   }
 
-
   void execute() {
 
+    // 애플리케이션이 시작될 때 리스너에게 알린다.
     for (ApplicationListener listener : listeners) {
       try {
         listener.onStrat(appCtx);
@@ -51,22 +52,25 @@ public class ServerApp {
       }
     }
 
-    //서버에서 사용할 Dao Skeleton 객체를 준비
+    // 서버에서 사용할 Dao Skeloton 객체를 준비한다.
     userDaoSkel = (UserDaoSkel) appCtx.getAttribute("userDaoSkel");
     boardDaoSkel = (BoardDaoSkel) appCtx.getAttribute("boardDaoSkel");
     projectDaoSkel = (ProjectDaoSkel) appCtx.getAttribute("projectDaoSkel");
 
     System.out.println("서버 프로젝트 관리 시스템 시작!");
 
-    try (ServerSocket serverSocket = new ServerSocket(8888)) {
-      // try에 위와 같은 것을 넣어두면 자동으로 close문을 닫아준다.
-      //try안에는 변수 선언만 넣어줄 수 있다.
-      // 일반 명령문은 넣어줄 수 없다.
-
-      System.out.println("서버 실행중...");
+    try (ServerSocket serverSocket = new ServerSocket(8888);) {
+      System.out.println("서버 실행 중...");
 
       while (true) {
-        processRequest(serverSocket.accept());
+        Socket socket = serverSocket.accept();
+        new Thread() {
+          @Override
+          public void run() {
+            processRequest(socket);
+          }
+        }.start();
+
       }
 
     } catch (Exception e) {
@@ -76,14 +80,16 @@ public class ServerApp {
 
     System.out.println("종료합니다.");
 
+    // 애플리케이션이 종료될 때 리스너에게 알린다.
     for (ApplicationListener listener : listeners) {
       try {
         listener.onShutdown(appCtx);
       } catch (Exception e) {
-        System.out.println("리스터 실행 중 오류 발생!");
+        System.out.println("리스너 실행 중 오류 발생!");
       }
     }
   }
+
 
   void processRequest(Socket s) {
     String remoteHost = null;
@@ -91,7 +97,7 @@ public class ServerApp {
 
     try (Socket socket = s) {
 
-      InetSocketAddress addr = (InetSocketAddress) s.getRemoteSocketAddress(); //Inet 주소 정보 리턴
+      InetSocketAddress addr = (InetSocketAddress) s.getRemoteSocketAddress();
       remoteHost = addr.getHostString();
       port = addr.getPort();
 
@@ -103,7 +109,7 @@ public class ServerApp {
       String dataName = in.readUTF();
       switch (dataName) {
         case "users":
-          userDaoSkel.service(in, out); //입출력 스트림 줄테니 니가 처리해라
+          userDaoSkel.service(in, out);
           break;
         case "projects":
           projectDaoSkel.service(in, out);
@@ -115,8 +121,11 @@ public class ServerApp {
       }
     } catch (Exception e) {
       System.out.printf("%s:%d 클라이언트 요청 처리 중 오류 발생!\n", remoteHost, port);
+      e.printStackTrace();
     }
   }
 }
+
+
 
 
