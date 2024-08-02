@@ -64,13 +64,38 @@ public class ServerApp {
 
       while (true) {
         Socket socket = serverSocket.accept();
-        new Thread() {
-          @Override
-          public void run() {
-            processRequest(socket);
-          }
-        }.start();
+//        0) 스레드의 로컬 서브 클래스를 만들어 실행시키기
+//        class RequestThread extends Thread {
+//        @Override
+//          public void run() {
+//            processRequest(socket);
+//          }
+//        }
+//
+//        new RequestThread().start();
+//        }
 
+        //1) 스레드의 익명 서브 클래스를 만들어 실행시키기
+//        new Thread() {
+//          
+//          
+//          
+//          @Override
+//          public void run() {
+//            processRequest(socket);
+//          }
+//        }.start();
+
+        //2) Runnable 구현체를 만들어 실행시키기
+//        new Thread(new Runnable() {
+//          @Override
+//          public void run() {
+//            processRequest(socket);
+//          }
+//        }).start();
+
+        //3) Lamda 문법으로 압축하기
+        new Thread(() -> processRequest(socket)).start();
       }
 
     } catch (Exception e) {
