@@ -17,6 +17,19 @@ public class HashsetExample {
 
     Iterator<String> iterator = set.iterator();
     while (iterator.hasNext()) {
+      String element = iterator.next();
+      System.out.println(element);
+      if (element.equals("JSP")) {
+        iterator.remove();
+      }
+    }
+    System.out.println();
+
+    set.remove("JDBC");
+
+    for (String element : set) {
+      System.out.println(element);
+    }
   }
 
 }
