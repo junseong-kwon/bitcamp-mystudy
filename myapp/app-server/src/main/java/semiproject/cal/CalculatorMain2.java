@@ -5,21 +5,19 @@ import java.util.Scanner;
 interface Execute {
 
   void execute();
-
 }
 
-public class CalculatorMain {
+public class CalculatorMain2 {
 
 
   public static String[] menus = {"더하기", "빼기", "곱하기", "나누기", "숫자 확인"};
 
   static Scanner scanner = new Scanner(System.in);
-  static int num1;
-  static int num2;
-  static int result;
+  private static int num1;
+  private static int num2;
+  private static int result;
 
   public static void main(String[] args) {
-
     System.out.print("첫번째 숫자를 입력하세요: ");
     num1 = scanner.nextInt();
     System.out.print("두번쨰 숫자를 입력하세요: ");
@@ -38,19 +36,42 @@ public class CalculatorMain {
           int goodchoice = Integer.parseInt(choice);
           switch (goodchoice) {
             case 1:
-              plus(num1, num2);
+              Execute plus = () -> {
+                result = num1 + num2;
+                System.out.print("두 수의 연산결과는 다음과 같습니다.\n" + result + "\n");
+              };
+              plus.execute();
               break;
             case 2:
-              minus(num1, num2);
+              Execute minus = new Execute() {
+                @Override
+                public void execute() {
+                  result = num1 - num2;
+                  System.out.print("두 수의 연산결과는 다음과 같습니다.\n" + result + "\n");
+                }
+              };
+              minus.execute();
               break;
             case 3:
-              mutiple(num1, num2);
+              Execute multiple = () -> {
+                result = num1 * num2;
+                System.out.print("두 수의 연산결과는 다음과 같습니다.\n" + result + "\n");
+              };
+              multiple.execute();
               break;
             case 4:
-              divine(num1, num2);
+              Execute divine = () -> {
+                double result = (double) num1 / (double) num2;
+                System.out.print("두 수의 연산결과는 다음과 같습니다.\n" + result + "\n");
+              };
+              divine.execute();
               break;
             case 5:
-              search();
+              Execute search = () -> {
+                System.out.println(
+                    "첫번째 숫자 : " + num1 + ", 두번째 숫자 : " + num2);
+              };
+              search.execute();
               break;
             case 0:
               return;
@@ -64,35 +85,11 @@ public class CalculatorMain {
     }
   }
 
-  static void plus(int num1, int num2) {
-    result = num1 + num2;
-    System.out.print("두 수의 연산결과는 다음과 같습니다.\n" + result + "\n");
-  }
-
-  static void minus(int num1, int num2) {
-    result = num1 - num2;
-    System.out.print("두 수의 연산결과는 다음과 같습니다.\n" + result + "\n");
-  }
-
-  static void mutiple(int num1, int num2) {
-    result = num1 * num2;
-    System.out.print("두 수의 연산결과는 다음과 같습니다.\n" + result + "\n");
-  }
-
-  static void divine(double num1, double num2) {
-    double result = (double) num1 / (double) num2;
-    System.out.print("두 수의 연산결과는 다음과 같습니다.\n" + result + "\n");
-  }
-
   static void menu() {
     for (int i = 0; i < menus.length; i++) {
       System.out.printf("%d. %s\n", (i + 1), menus[i]);
     }
     System.out.println("0. 종료");
-  }
-
-  static void search() {
-    System.out.println("숫자1: " + num1 + ", 숫자2 : " + num2);
   }
 }
 
