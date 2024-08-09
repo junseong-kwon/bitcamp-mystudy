@@ -10,11 +10,9 @@ public class MenuGroup extends AbstractMenu {
   private ArrayList<Menu> children = new ArrayList<>();
   private String exitMenuTitle = "이전";
 
-
   public MenuGroup(String title) {
     super(title);
   }
-
 
   @Override
   public void execute() {
@@ -50,7 +48,6 @@ public class MenuGroup extends AbstractMenu {
 
   public void setExitMenuTitle(String title) {
     exitMenuTitle = title;
-
   }
 
   private void printMenus() {
@@ -63,7 +60,7 @@ public class MenuGroup extends AbstractMenu {
   }
 
   private String getMenuPath() {
-    // 현재 메뉴 그룹에서 상위 메뉴 그룹으로 따라 올라가면서 메뉴 이름을 스택에 담는다.
+    // 현재 메뉴그룹에서 상위 메뉴그룹으로 따라 올라가면서 메뉴이름을 스택에 담는다.
     Stack<String> menuPathStack = new Stack<>();
     MenuGroup menuGroup = this;
     while (menuGroup != null) {
@@ -71,7 +68,7 @@ public class MenuGroup extends AbstractMenu {
       menuGroup = menuGroup.parent;
     }
 
-    //스택에 담겨 있는 메뉴 이름을 꺼내서 메뉴 경로를 만든다.
+    // 스택에 담겨 있는 메뉴이름을 꺼내서 메뉴 경로를 만든다.
     StringBuilder strBuilder = new StringBuilder();
     while (!menuPathStack.isEmpty()) {
       if (strBuilder.length() > 0) {
@@ -79,9 +76,9 @@ public class MenuGroup extends AbstractMenu {
       }
       strBuilder.append(menuPathStack.pop());
     }
+
     return strBuilder.toString();
   }
-
 
   private void setParent(MenuGroup parent) {
     this.parent = parent;
@@ -89,7 +86,7 @@ public class MenuGroup extends AbstractMenu {
 
   public void add(Menu child) {
     if (child instanceof MenuGroup) {
-      ((MenuGroup) child).setParent(this); // child는 MenuGroup이야 너의 부모는 나다
+      ((MenuGroup) child).setParent(this);
     }
     children.add(child);
   }
@@ -105,7 +102,7 @@ public class MenuGroup extends AbstractMenu {
     return children.get(index);
   }
 
-  public int countMenu() {
+  public int countMenus() {
     return children.size();
   }
 }

@@ -36,7 +36,6 @@ public class ProjectMemberHandler {
     }
   }
 
-
   public void deleteMembers(Project project) {
     Object[] members = project.getMembers().toArray();
     for (Object obj : members) {

@@ -15,12 +15,13 @@ public class ClientApp {
   public static void main(String[] args) {
     ClientApp app = new ClientApp();
 
-    app.addApplicationlistener(new InitApplicationListener());
+    // 애플리케이션이 시작되거나 종료될 때 알림 받을 객체의 연락처를 등록한다.
+    app.addApplicationListener(new InitApplicationListener());
 
     app.execute();
   }
 
-  private void addApplicationlistener(ApplicationListener listener) {
+  private void addApplicationListener(ApplicationListener listener) {
     listeners.add(listener);
   }
 
@@ -28,16 +29,17 @@ public class ClientApp {
     listeners.remove(listener);
   }
 
-
   void execute() {
+
     try {
+      appCtx.setAttribute("url", "jdbc:mysql://localhost/studydb"/*Prompt.input("DBMS URL?")*/);
+      appCtx.setAttribute("username", "study"/*Prompt.input("아이디?")*/);
+      appCtx.setAttribute("password", "1111"/*Prompt.input("암호?")*/);
 
-      appCtx.setAttribute("host", Prompt.input("서버 주소?"));
-      appCtx.setAttribute("port", Prompt.inputInt("포트 번호?"));
-
+      // 애플리케이션이 시작될 때 리스너에게 알린다.
       for (ApplicationListener listener : listeners) {
         try {
-          listener.onStrat(appCtx);
+          listener.onStart(appCtx);
         } catch (Exception e) {
           System.out.println("리스너 실행 중 오류 발생!");
         }
@@ -46,7 +48,6 @@ public class ClientApp {
       System.out.println("[프로젝트 관리 시스템]");
 
       appCtx.getMainMenu().execute();
-
 
     } catch (Exception ex) {
       System.out.println("실행 오류!");
@@ -57,11 +58,12 @@ public class ClientApp {
 
     Prompt.close();
 
+    // 애플리케이션이 종료될 때 리스너에게 알린다.
     for (ApplicationListener listener : listeners) {
       try {
         listener.onShutdown(appCtx);
       } catch (Exception e) {
-        System.out.println("리스터 실행 중 오류 발생!");
+        System.out.println("리스너 실행 중 오류 발생!");
       }
     }
   }

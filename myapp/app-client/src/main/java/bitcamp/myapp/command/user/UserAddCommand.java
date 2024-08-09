@@ -17,7 +17,6 @@ public class UserAddCommand implements Command {
   public void execute(String menuName) {
     System.out.printf("[%s]\n", menuName);
     try {
-
       User user = new User();
       user.setName(Prompt.input("이름?"));
       user.setEmail(Prompt.input("이메일?"));
@@ -25,7 +24,6 @@ public class UserAddCommand implements Command {
       user.setTel(Prompt.input("연락처?"));
 
       userDao.insert(user);
-
     } catch (Exception e) {
       System.out.println("등록 중 오류 발생!");
     }

@@ -1,9 +1,9 @@
 package bitcamp.menu;
 
+
 import bitcamp.command.Command;
 
 public class MenuItem extends AbstractMenu {
-
 
   Command command;
 

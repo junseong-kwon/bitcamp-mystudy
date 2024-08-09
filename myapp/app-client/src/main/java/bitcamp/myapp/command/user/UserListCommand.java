@@ -15,12 +15,14 @@ public class UserListCommand implements Command {
   @Override
   public void execute(String menuName) {
     System.out.printf("[%s]\n", menuName);
+
     try {
       System.out.println("번호 이름 이메일");
 
       for (User user : userDao.list()) {
         System.out.printf("%d %s %s\n", user.getNo(), user.getName(), user.getEmail());
       }
+
     } catch (Exception e) {
       System.out.println("목록 조회 중 오류 발생!");
     }
