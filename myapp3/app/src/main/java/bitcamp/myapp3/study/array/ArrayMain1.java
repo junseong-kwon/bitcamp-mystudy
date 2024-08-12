@@ -16,5 +16,4 @@ public class ArrayMain1 {
 
     System.out.println("==index 조회: 0(1)==");
   }
-
 }
