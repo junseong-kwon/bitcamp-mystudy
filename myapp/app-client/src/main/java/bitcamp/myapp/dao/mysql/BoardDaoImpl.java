@@ -24,6 +24,7 @@ public class BoardDaoImpl implements BoardDao {
               + " values ('%s', '%s')",
           board.getTitle(),
           board.getContent()));
+
       return true;
     }
   }
