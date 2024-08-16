@@ -35,7 +35,7 @@ public class Exam0220 {
     }
 
     try (Connection con = DriverManager.getConnection( //
-        "jdbc:mysql://localhost:3306/studydb", "study", "Bitcamp!@#123");
+        "jdbc:mysql://localhost:3306/studydb", "study", "1111");
 
         // => 게시글을 입력할 때 자동 생성된 PK 값을 받겠다고 설정한다.
         PreparedStatement boardStmt = con.prepareStatement(
@@ -116,6 +116,8 @@ public class Exam0220 {
       //    새 작업에 영향을 주기 때문이다.
       // 결론,
       // => 예외가 발생하면 rollback()을 명시적으로 호출하라!!!!!!
+      
+      
     }
   }
 }
