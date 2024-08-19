@@ -13,7 +13,9 @@ public class ProjectUpdateCommand implements Command {
   private Connection con;
 
   public ProjectUpdateCommand(ProjectDao projectDao,
-      ProjectMemberHandler memberHandler, Connection con) {
+      ProjectMemberHandler memberHandler,
+      Connection con) {
+
     this.projectDao = projectDao;
     this.memberHandler = memberHandler;
     this.con = con;
@@ -42,13 +44,11 @@ public class ProjectUpdateCommand implements Command {
       memberHandler.addMembers(project);
 
       con.setAutoCommit(false);
-
       projectDao.update(project);
       projectDao.deleteMembers(projectNo);
       projectDao.insertMembers(projectNo, project.getMembers());
-      System.out.println("변경 했습니다.");
-
       con.commit();
+      System.out.println("변경 했습니다.");
 
     } catch (Exception e) {
       try {

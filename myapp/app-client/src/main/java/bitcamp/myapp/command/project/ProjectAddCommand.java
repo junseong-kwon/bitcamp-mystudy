@@ -34,13 +34,11 @@ public class ProjectAddCommand implements Command {
       memberHandler.addMembers(project);
 
       con.setAutoCommit(false);
-
       projectDao.insert(project);
       projectDao.insertMembers(project.getNo(), project.getMembers());
+      con.commit();
 
       System.out.println("등록했습니다.");
-
-      con.commit();
 
     } catch (Exception e) {
       try {

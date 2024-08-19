@@ -28,12 +28,11 @@ public class ProjectDeleteCommand implements Command {
         return;
       }
 
-      projectDao.deleteMembers(projectNo);
       con.setAutoCommit(false);
-
+      projectDao.deleteMembers(projectNo);
       projectDao.delete(projectNo);
-      System.out.printf("%d번 프로젝트를 삭제 했습니다.\n", deletedProject.getNo());
       con.commit();
+      System.out.printf("%d번 프로젝트를 삭제 했습니다.\n", deletedProject.getNo());
 
     } catch (Exception e) {
       try {
@@ -44,7 +43,7 @@ public class ProjectDeleteCommand implements Command {
     } finally {
       try {
         con.setAutoCommit(true);
-      } catch (Exception e) {
+      } catch (Exception e2) {
       }
     }
   }
