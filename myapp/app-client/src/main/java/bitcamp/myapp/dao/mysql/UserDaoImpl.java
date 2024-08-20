@@ -1,72 +1,55 @@
 package bitcamp.myapp.dao.mysql;
 
-import bitcamp.bitbatis.SqlSession;
 import bitcamp.myapp.dao.UserDao;
 import bitcamp.myapp.vo.User;
+import org.apache.ibatis.session.SqlSession;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class UserDaoImpl implements UserDao {
 
-  private SqlSession sqlSession;
+    private SqlSession sqlSession;
 
-  public UserDaoImpl(SqlSession sqlSession) {
-    this.sqlSession = sqlSession;
-  }
+    public UserDaoImpl(SqlSession sqlSession) {
+        this.sqlSession = sqlSession;
+    }
 
-  @Override
-  public boolean insert(User user) throws Exception {
-    sqlSession.insert(
-        "insert into myapp_users(name, email, pwd, tel) values (?, ?, sha1(?), ?)",
-        user.getName(),
-        user.getEmail(),
-        user.getPassword(),
-        user.getTel());
-    return true;
-  }
+    @Override
+    public boolean insert(User user) throws Exception {
+        sqlSession.insert("UserDao.insert", user);
+        return true;
+    }
 
-  @Override
-  public List<User> list() throws Exception {
-    return sqlSession.selectList(
-        "select "
-            + " user_id as no,"
-            + " name,"
-            + " email"
-            + " from myapp_users order by user_id asc",
-        User.class);
-  }
+    @Override
+    public List<User> list() throws Exception {
+        return sqlSession.selectList("UserDao.list");
+    }
 
-  @Override
-  public User findBy(int no) throws Exception {
-    return sqlSession.selectOne(
-        "select user_id as no, name, email, tel from myapp_users where user_id=?",
-        User.class,
-        no);
-  }
+    @Override
+    public User findBy(int no) throws Exception {
+        return sqlSession.selectOne("UserDao.findBy", no);
+    }
 
-  @Override
-  public User findByEmailAndPassword(String email, String password) throws Exception {
-    return sqlSession.selectOne(
-        "select user_id as no, name, email, tel from myapp_users where email=? and pwd=sha1(?)",
-        User.class,
-        email,
-        password);
-  }
+    @Override
+    public User findByEmailAndPassword(String email, String password) throws Exception {
+        Map<String, Object> values = new HashMap<>();
+        values.put("email", email);
+        values.put("password", password);
 
-  @Override
-  public boolean update(User user) throws Exception {
-    int count = sqlSession.update(
-        "update myapp_users set name=?, email=?, pwd=sha1(?), tel=? where user_id=?",
-        user.getName(),
-        user.getEmail(),
-        user.getPassword(),
-        user.getTel(),
-        user.getNo());
-    return count > 0;
-  }
+        return sqlSession.selectOne("UserDao.findByEmailAndPassword", values);
+    }
 
-  @Override
-  public boolean delete(int no) throws Exception {
-    int count = sqlSession.delete("delete from myapp_users where user_id=?", no);
-    return count > 0;
-  }
+    @Override
+    public boolean update(User user) throws Exception {
+        int count = sqlSession.update("UserDao.update", user);
+        return count > 0;
+    }
+
+    @Override
+    public boolean delete(int no) throws Exception {
+        int count = sqlSession.delete("UserDao.delete", no);
+        return count > 0;
+    }
 }

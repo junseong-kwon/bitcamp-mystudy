@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?> <!-- xml파일은 반드시 첫줄에 xml을 선언해줘야한다. 1.0만 사용가능하다 -->
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-config.dtd">
+<!--DOCTYPE xml의 규칙 선언 configuration root element(태크)-->
+<!-- public 공개여부 System(비공개)이 대신 올수도 있다   -->
+<!-- '+'는 국제 공인규칙, '-'는 사설 규칙 mybatis.org는 규칙을 관리하는 조직명   -->
+<!--DTD- 규칙이름 //EN 규칙을 작성한 언어.  -->
+<!--"https://~ 규칙을 정의한 명세서의 URL -->
+<!-- XML (Extensible Markup Language) 데이터를 구ㅋ조화시켜 저장하는 일을 한다. -->
+<configuration><!-- 시작 태그-->
+
+  <!-- .properties 파일 로딩 -->
+  <properties resource="jdbc.properties"/>
+
+
+  <!-- DBMS 접속 정보 -->
+  <environments default="development-local">
+
+  <!-- 개발하는 동안 사용할 DBMS 접속 정보 -->
+    <environment id="development-local">
+  <transactionManager type="JDBC"/>
+      <dataSource type="POOLED">
+        <property name="driver" value="${jdbc.driver}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+      </dataSource>
+    </environment>
+
+  </environments>
+
+<!-- SQL문 파일 위치 -->
+  <mappers>
+    <mapper resource="UserDaoMapper.xml"/>
+    <mapper resource="BoardDaoMapper.xml"/>
+  </mappers>
+
+
+  </configuration><!-- 끝태그 -->
