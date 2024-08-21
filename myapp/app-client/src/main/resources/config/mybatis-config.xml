@@ -7,11 +7,21 @@
 <!-- '+'는 국제 공인규칙, '-'는 사설 규칙 mybatis.org는 규칙을 관리하는 조직명   -->
 <!--DTD- 규칙이름 //EN 규칙을 작성한 언어.  -->
 <!--"https://~ 규칙을 정의한 명세서의 URL -->
-<!-- XML (Extensible Markup Language) 데이터를 구ㅋ조화시켜 저장하는 일을 한다. -->
+<!-- XML (Extensible Markup Language) 데이터를 구조화시켜 저장하는 일을 한다. -->
 <configuration><!-- 시작 태그-->
 
   <!-- .properties 파일 로딩 -->
-  <properties resource="jdbc.properties"/>
+  <properties resource="config/jdbc.properties"/>
+
+  <!-- 도메인 클래스에 별명 부여하기 -->
+  <typeAliases>
+    <!--
+    <typeAlias type="bitcamp.myapp.vo.User" alias="user"/>
+    <typeAlias type="bitcamp.myapp.vo.Board" alias="board"/>
+    <typeAlias type="bitcamp.myapp.vo.Project" alias="project"/>
+    -->
+    <package name="bitcamp.myapp.vo"/>
+  </typeAliases>
 
 
   <!-- DBMS 접속 정보 -->
@@ -32,8 +42,9 @@
 
 <!-- SQL문 파일 위치 -->
   <mappers>
-    <mapper resource="UserDaoMapper.xml"/>
-    <mapper resource="BoardDaoMapper.xml"/>
+    <mapper resource="mappers/UserDaoMapper.xml"/>
+    <mapper resource="mappers/BoardDaoMapper.xml"/>
+    <mapper resource="mappers/ProjectDaoMapper.xml"/>
   </mappers>
 
 
