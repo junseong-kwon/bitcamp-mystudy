@@ -1,5 +1,5 @@
 // Proxy 를 이용한 DAO 구현체 자동 생성하기
-package com.eomcs.reflect.ex06.f;
+package study.reflect.ex06.f;
 
 import java.util.HashMap;
 import java.util.List;
