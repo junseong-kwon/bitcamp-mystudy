@@ -24,7 +24,7 @@ public class ProjectUpdateCommand implements Command {
     @Override
     public void execute(String menuName, Prompt prompt) {
         try {
-            System.out.printf("[%s]\n", menuName);
+            prompt.printf("[%s]\n", menuName);
             int projectNo = prompt.inputInt("프로젝트 번호?");
 
 

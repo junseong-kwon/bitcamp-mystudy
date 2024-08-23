@@ -19,9 +19,9 @@ public class ProjectDeleteCommand implements Command {
     @Override
     public void execute(String menuName, Prompt prompt) {
         try {
-
             prompt.printf("[%s]\n", menuName);
             int projectNo = prompt.inputInt("프로젝트 번호?");
+
 
             Project deletedProject = projectDao.findBy(projectNo);
             if (deletedProject == null) {

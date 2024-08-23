@@ -35,14 +35,14 @@ public class MenuGroup extends AbstractMenu {
                     int menuNo = Integer.parseInt(command);
                     Menu menu = getMenu(menuNo - 1);
                     if (menu == null) {
-                        prompt.println("유효한 메뉴 번호가 아닙니다.");
+                        System.out.println("유효한 메뉴 번호가 아닙니다.");
                         continue;
                     }
 
                     menu.execute(prompt);
 
                 } catch (NumberFormatException ex) {
-                    prompt.println("숫자로 메뉴 번호를 입력하세요.");
+                    System.out.println("숫자로 메뉴 번호를 입력하세요.");
                 }
             }
         } catch (Exception e) {
@@ -56,12 +56,12 @@ public class MenuGroup extends AbstractMenu {
     }
 
     private void printMenus(Prompt prompt) {
-        prompt.printf("[%s]\n", title);
+        System.out.printf("[%s]\n", title);
         int i = 1;
         for (Menu menu : children) {
-            prompt.printf("%d. %s\n", i++, menu.getTitle());
+            System.out.printf("%d. %s\n", i++, menu.getTitle());
         }
-        prompt.printf("0. %s\n", exitMenuTitle);
+        System.out.printf("0. %s\n", exitMenuTitle);
     }
 
     private String getMenuPath() {

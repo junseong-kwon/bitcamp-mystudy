@@ -38,7 +38,6 @@ public class ProjectMemberHandler {
 
             project.getMembers().add(user);
             prompt.printf("'%s'을 추가했습니다.\n", user.getName());
-
         }
     }
 

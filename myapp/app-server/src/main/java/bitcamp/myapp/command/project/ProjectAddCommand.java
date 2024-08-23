@@ -21,9 +21,10 @@ public class ProjectAddCommand implements Command {
 
     @Override
     public void execute(String menuName, Prompt prompt) {
-        prompt.printf("[%s]\n", menuName);
-
         try {
+            prompt.printf("[%s]\n", menuName);
+
+
             Project project = new Project();
             project.setTitle(prompt.input("프로젝트명?"));
             project.setDescription(prompt.input("설명?"));
