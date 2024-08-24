@@ -44,7 +44,7 @@ public class Prompt {
     }
 
     public String input(String format, Object... args) throws Exception {
-        String promptTitle = String.format(format + " ", args);
+        String promptTitle = String.format(format, args);
         print(promptTitle);
         end();
 
