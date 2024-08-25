@@ -5,10 +5,7 @@ import com.study.board.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class BoardController {
@@ -23,11 +20,14 @@ public class BoardController {
     }
 
     @PostMapping("/board/writepro")
-    public String boardWritePro(Board board) { // 보드 객체를 받고
+    public String boardWritePro(Board board, Model model) { // 보드 객체를 받고
 
         boardService.write(board);
 
-        return "";
+            model.addAttribute("message", "글 작성이 완료되었습니다."); //메시지를 받은거 출력
+        model.addAttribute("searchUrl", "/board/list"); // 보내줄 위치 지정
+
+        return "message";
     }
 
     @GetMapping("/board/list")
@@ -37,4 +37,54 @@ public class BoardController {
 
         return "boardlist";
     }
+
+    @GetMapping("/board/view") // localhost:8090/board/view?id=1
+    public String boardView(Model model, @RequestParam("id") Integer id) { //매개변수에서 다시 받아올떄는 Model을 적어줘야 한다.  1이 들어가서
+
+        model.addAttribute("board", boardService.boardView(id)); //게시글을 불러온다
+
+        return "boardview";
+    }
+
+    @GetMapping("/board/delete")
+        public String boardDelete(@RequestParam("id") Integer id) {
+
+        boardService.boardDelete(id);
+
+        return "redirect:/board/list";
+    }
+
+    @GetMapping("/board/modify/{id}") //뒤에 있는 중괄호의 아이디가
+    public String boardModify(@PathVariable("id")  Integer id, Model model) { // PathVariable에 인식되서 Integer 형태의 id값으로 들어옴
+
+        model.addAttribute("board", boardService.boardView(id));
+
+        return "boardmodify";
+    }
+
+    // url의 파라미터를 넘길떄 방법은 2가지
+    //첫번째는 queryString을 쓰는 방법
+    //PathVariable을 통해서 값을 받아오는 방법이 있다.
+
+   @PostMapping("/board/update/{id}")
+    public String boardUpdate(@PathVariable("id") Integer id, Board board, Model model) {
+
+
+       boardService.write(board);
+
+        Board boardTemp = boardService.boardView(id);
+
+        boardTemp.setTitle(board.getTitle());
+        boardTemp.setContent(board.getContent());
+       boardService.write(boardTemp);
+
+
+       model.addAttribute("message", "글 수정이 완료되었습니다."); //메시지를 받은거 출력
+       model.addAttribute("searchUrl", "/board/list");
+
+
+
+
+        return "message";
+   }
 }
