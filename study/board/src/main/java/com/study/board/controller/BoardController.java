@@ -47,11 +47,14 @@ public class BoardController {
     }
 
     @GetMapping("/board/delete")
-        public String boardDelete(@RequestParam("id") Integer id) {
+        public String boardDelete(@RequestParam("id") Integer id, Model model) {
 
         boardService.boardDelete(id);
 
-        return "redirect:/board/list";
+        model.addAttribute("message", "글 삭제가 완료되었습니다."); //메시지를 받은거 출력
+        model.addAttribute("searchUrl", "/board/list");
+
+        return "message";
     }
 
     @GetMapping("/board/modify/{id}") //뒤에 있는 중괄호의 아이디가

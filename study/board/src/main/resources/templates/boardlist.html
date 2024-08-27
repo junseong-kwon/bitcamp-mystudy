@@ -20,8 +20,11 @@
         <table>
             <thead>
                 <tr>
-                    <th>글번호</th>
-                    <th>제목</th>
+                    <th> 글번호 </th>
+                    <th> 날짜 </th>
+                    <th> 할 일</th>
+                    <th> 완료 </th>
+                    <a th:href="@{/board/write}">등록</a>
                 </tr>
             </thead>
             <tbody>
@@ -30,6 +33,13 @@
                     <td>
                         <a th:text="${board.title}" th:href="@{/board/view(id=${board.id})}"> </a>
                     </td>
+                    <td>
+                        <a th:text="${board.content}"> </a>
+                    </td>
+                    <td>
+                        <input type="checkbox" th:checked="${board.completed ?: false}" onclick="toggleCheckbox(this)">
+                    </td>
+
                 </tr>
             </tbody>
         </table>
