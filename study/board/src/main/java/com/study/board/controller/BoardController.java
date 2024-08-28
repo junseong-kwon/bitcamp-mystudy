@@ -50,8 +50,12 @@ public class BoardController {
         public String boardDelete(@RequestParam("id") Integer id, Model model) {
 
         boardService.boardDelete(id);
-
-        model.addAttribute("message", "글 삭제가 완료되었습니다."); //메시지를 받은거 출력
+            if (true) {
+             model.addAttribute("message", "글 삭제가 완료되었습니다.");
+    //메시지를 받은거 출력
+            } else {
+            return "boardview";
+            }
         model.addAttribute("searchUrl", "/board/list");
 
         return "message";

@@ -25,44 +25,50 @@ public class ProjectViewServlet extends GenericServlet {
 
     @Override
     public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
-
         res.setContentType("text/html;charset=UTF-8");
 
         PrintWriter out = res.getWriter();
         out.println("<!DOCTYPE html>");
         out.println("<html>");
         out.println("<head>");
-        out.println("   <title>Title</title>");
+        out.println("    <meta charset='UTF-8'>");
+        out.println("    <title>Title</title>");
+        out.println("    <link href='/css/common.css' rel='stylesheet'>");
         out.println("</head>");
         out.println("<body>");
-        out.println("</body>");
-        out.println("</html>");
 
         try {
-            out.println("<h1.프로젝트 조회</h1>");
-            int projectNo = Integer.parseInt(req.getParameter("no"));
+            out.println("<header>");
+            out.println("<a href=/><img src=/images/home.png></a>");
+            out.println("프로젝트 관리 시스템");
+            out.println("</header>");
+            out.println("<h1>프로젝트 조회</h1>");
 
+            int projectNo = Integer.parseInt(req.getParameter("no"));
 
             Project project = projectDao.findBy(projectNo);
             if (project == null) {
                 out.println("<p>없는 프로젝트입니다.</p>");
+                out.println("</body>");
+                out.println("</html>");
                 return;
             }
 
             out.printf("<p>프로젝트명: %s</p>\n", project.getTitle());
             out.printf("<p>설명: %s</p>\n", project.getDescription());
             out.printf("<p>기간: %s ~ %s</p>\n", project.getStartDate(), project.getEndDate());
-            out.println("팀원:");
-            for (User user : project.getMembers()) {
-                out.printf("%s\n", user.getName());
-            }
 
+            out.println("<p>팀원:</p>");
+            out.println("<ul>");
+            for (User user : project.getMembers()) {
+                out.printf("<li>%s</li>\n", user.getName());
+            }
+            out.println("</ul>");
 
         } catch (Exception e) {
             out.println("<p>조회 중 오류 발생!</p>");
         }
-        out.println("</tbody>");
-        out.println("</table>");
+
+
     }
 }
-

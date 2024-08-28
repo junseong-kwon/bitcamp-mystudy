@@ -2,6 +2,7 @@ package bitcamp.myapp.servlet.board;
 
 import bitcamp.myapp.dao.BoardDao;
 import bitcamp.myapp.vo.Board;
+import org.apache.ibatis.session.SqlSessionFactory;
 
 import javax.servlet.GenericServlet;
 import javax.servlet.ServletException;
@@ -15,38 +16,49 @@ import java.io.PrintWriter;
 public class BoardViewServlet extends GenericServlet {
 
     private BoardDao boardDao;
+    private SqlSessionFactory sqlSessionFactory;
 
     @Override
     public void init() throws ServletException {
         // 서블릿 컨테이너 ---> init(ServletConfig) ---> init() 호출한다.
         boardDao = (BoardDao) this.getServletContext().getAttribute("boardDao");
+        sqlSessionFactory = (SqlSessionFactory) this.getServletContext().getAttribute("sqlSessionFactory");
     }
 
     @Override
     public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
-
         res.setContentType("text/html;charset=UTF-8");
 
         PrintWriter out = res.getWriter();
         out.println("<!DOCTYPE html>");
         out.println("<html>");
         out.println("<head>");
-        out.println("   <title>Title</title>");
+        out.println("    <meta charset='UTF-8'>");
+        out.println("    <title>Title</title>");
+        out.println("    <link href='/css/common.css' rel='stylesheet'>");
         out.println("</head>");
         out.println("<body>");
-        out.println("</body>");
-        out.println("</html>");
 
         try {
-            out.println("<h1.게시글 조회</h1>");
-            int boardNo = Integer.parseInt(req.getParameter("no"));
+            out.println("<header>");
+            out.println("<a href=/><img src=/images/home.png></a>");
+            out.println("게시판 관리 시스템");
+            out.println("</header>");
+            out.println("<h1>게시글 조회</h1>");
 
+            int boardNo = Integer.parseInt(req.getParameter("no"));
 
             Board board = boardDao.findBy(boardNo);
             if (board == null) {
                 out.println("<p>없는 게시글입니다.</p>");
+                out.println("</body>");
+                out.println("</html>");
                 return;
             }
+
+            board.setViewCount(board.getViewCount() + 1);
+            boardDao.updateViewCount(board.getNo(), board.getViewCount());
+            sqlSessionFactory.openSession(false).commit();
 
             out.printf("<p>제목: %s</p>\n", board.getTitle());
             out.printf("<p>내용: %s</p>\n", board.getContent());
@@ -55,10 +67,11 @@ public class BoardViewServlet extends GenericServlet {
             out.printf("<p>작성자: %s</p>\n", board.getWriter().getName());
 
         } catch (Exception e) {
+            sqlSessionFactory.openSession(false).rollback();
             out.println("<p>조회 중 오류 발생!</p>");
+            e.printStackTrace();
         }
-        out.println("</tbody>");
-        out.println("</table>");
+
+
     }
 }
-
