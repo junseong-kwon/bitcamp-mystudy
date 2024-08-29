@@ -9,6 +9,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -28,20 +29,12 @@ public class LoginServlet extends GenericServlet {
         res.setContentType("text/html;charset=UTF-8");
 
         PrintWriter out = res.getWriter();
-        out.println("<!DOCTYPE html>");
-        out.println("<html>");
-        out.println("<head>");
-        out.println("    <meta charset='UTF-8'>");
-        out.println("    <title>Title</title>");
-        out.println("    <link href='/css/common.css' rel='stylesheet'>");
-        out.println("</head>");
-        out.println("<body>");
+
+        req.getRequestDispatcher("/header").include(req, res);
+
 
         try {
-            out.println("<header>");
-            out.println("<a href=/><img src=/images/home.png></a>");
-            out.println("유저 관리 시스템");
-            out.println("</header>");
+
             out.println("<h1>로그인 결과</h1>");
 
             String email = req.getParameter("email");
@@ -52,6 +45,7 @@ public class LoginServlet extends GenericServlet {
                 out.println("<p>이메일 또는 암호가 맞지 않습니다.</p>");
                 out.println("</body>");
                 out.println("</html>");
+                ((HttpServletResponse) res).setHeader("Refresh", "1;url=/auth/form");
                 return;
             }
 
@@ -69,7 +63,10 @@ public class LoginServlet extends GenericServlet {
         } catch (Exception e) {
             out.println("<p>조회 중 오류 발생!</p>");
         }
+        out.println("</head>");
+        out.println("<body>");
 
+        ((HttpServletResponse) res).sendRedirect("/");// 지금까지 출력된건 버리고 제공되는 정보만 출력 (지금의 경우는 루트로 보냄)
 
     }
 }

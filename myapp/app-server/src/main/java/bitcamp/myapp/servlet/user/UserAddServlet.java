@@ -6,6 +6,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -22,26 +23,15 @@ public class UserAddServlet extends GenericServlet {
         this.sqlSessionFactory = (SqlSessionFactory) ctx.getAttribute("sqlSessionFactory");
     }
 
-    @Override
+    @Override // ServletRequest(부모)는 httpServletRequest(자식), ServletResponse는 HttpServletResponse가 넘어온다.
     public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
         res.setContentType("text/html;charset=UTF-8");
-
         PrintWriter out = res.getWriter();
-        out.println("<!DOCTYPE html>");
-        out.println("<html>");
-        out.println("<head>");
-        out.println("    <meta charset='UTF-8'>");
-        out.println("    <meta http-equiv='refresh' content='1;url=/user/list'>");
-        out.println("    <title>Title</title>");
-        out.println("    <link href='/css/common.css' rel='stylesheet'>");
-        out.println("</head>");
-        out.println("<body>");
+
+        req.getRequestDispatcher("/header").include(req, res);
 
         try {
-            out.println("<header>");
-            out.println("<a href=/><img src=/images/home.png></a>");
-            out.println("유저 관리 시스템");
-            out.println("</header>");
+
             out.println("<h1>회원 등록 결과</h1>");
 
             User user = new User();
@@ -60,6 +50,8 @@ public class UserAddServlet extends GenericServlet {
         }
 
         out.println("</body>");
-        out.println("</html>");
-    }
+        out.println("</html>"); //버퍼에 보관
+
+        ((HttpServletResponse) res).setHeader("Refresh", "1;url=/user/list"); //ServletResponse에는 setHeader가 없지만 자식인 HttpServletResponse에는 존재한다.
+    } //버퍼를 초과하면 자동으로 데이터를 보내지만 그렇지 않으면 맨 마지막에 헤더를 세팅해도 좋다.
 }

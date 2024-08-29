@@ -2,10 +2,14 @@ package com.study.board.controller;
 
 import com.study.board.entity.Board;
 import com.study.board.service.BoardService;
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class BoardController {
@@ -13,13 +17,13 @@ public class BoardController {
     @Autowired// BoardController에 BoardService객체를 생성해서 연결해준다.
     private BoardService boardService;
 
-    @GetMapping("/board/write") //localhost:8090/board/write에
+    @PostMapping("/board/write") //localhost:8090/board/write에
     public String boardWriteForm() { //boardwrite.html문서를 출력 하겠다는 뜻
 
         return "boardwrite";
     }
 
-    @PostMapping("/board/writepro")
+    @PostMapping("/board/writepro") //PostMapping은 폼을 통해 데이터를 입력하고 제출할때 사용
     public String boardWritePro(Board board, Model model) { // 보드 객체를 받고
 
         boardService.write(board);
@@ -30,7 +34,7 @@ public class BoardController {
         return "message";
     }
 
-    @GetMapping("/board/list")
+    @GetMapping("/board/list") //GetMapping은 웹 페이지를 로드하거나 데이터를 읽을때 사용
     public String boardList(Model model) {
 
         model.addAttribute("list", boardService.boardList()); // list라는 이름으로 보낼거야 보드 서비스의 보드 리스트를 리스트에 담아서 넘길거야
@@ -45,6 +49,20 @@ public class BoardController {
 
         return "boardview";
     }
+
+    @PostMapping("/board/updateCompleted")
+    public String updateCompleted(@RequestParam("id") Integer id, @RequestParam(value = "completed", defaultValue = "false") Boolean completed, RedirectAttributes redirectAttributes) {
+        Board board = boardService.boardView(id);
+        if (board != null) {
+            board.setCompleted(completed);
+            boardService.write(board);
+            redirectAttributes.addFlashAttribute("message", "상태 업데이트 성공");
+        } else {
+            redirectAttributes.addFlashAttribute("message", "게시글을 찾을 수 없습니다.");
+        }
+        return "redirect:/board/list";
+    }
+
 
     @GetMapping("/board/delete")
         public String boardDelete(@RequestParam("id") Integer id, Model model) {
@@ -90,8 +108,10 @@ public class BoardController {
        model.addAttribute("searchUrl", "/board/list");
 
 
-
-
         return "message";
    }
+
+
+
+
 }

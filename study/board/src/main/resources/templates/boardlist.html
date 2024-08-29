@@ -2,7 +2,9 @@
 <html lang="en" xmlns:th="http://www.thymelaef.org">
 <head>
     <meta charset="UTF-8">
-    <title>게시글 리스트 페이지</title>
+    <title>투두 리스트</title>
+    <link href="/css/common.css" rel='stylesheet'>
+
 </head>
 
 <style>
@@ -10,6 +12,7 @@
         width : 400px;
         margin : 0 auto;
         margin-top : 40px;
+        font-size : 20px;
      }
 </style>
 
@@ -24,7 +27,10 @@
                     <th> 제목 </th>
                     <th> 할 일</th>
                     <th> 완료 </th>
-                    <a th:href="@{/board/write}">등록</a>
+                    <form th:action="@{/board/write}" method="post">
+                        <button type="submit">등록</button>
+                    </form>
+
                 </tr>
             </thead>
             <tbody>
@@ -39,8 +45,10 @@
                         <a th:text="${board.content}">1</a>
                     </td>
                     <td>
-                        <input type="checkbox" name="completed" th:value="${board.completed}"
-                               th:checked="${board.completed}">
+                        <form th:action="@{/board/updateCompleted}" method="post">
+                            <input type="hidden" name="id" th:value="${board.id}" />
+                            <input type="checkbox" name="completed" th:checked="${board.completed}" onchange="this.form.submit()" />
+                        </form>
                     </td>
                 </tr>
             </tbody>
