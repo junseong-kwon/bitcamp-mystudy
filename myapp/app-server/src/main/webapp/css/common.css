@@ -29,7 +29,7 @@ table {
     header > h1 {
         border2: 1px solid red;
         display: inline;
-        font-size: 14px;
+        font-size: 16px;
     }
 
     header > nav {
@@ -77,10 +77,25 @@ table {
         background-color: white;
     }
 
+    .btn-primary{
+        background-color: navy;
+        color: white;
+    }
+
+    .btn-secondary{
+        background-color: darkgreen;
+        color: white;
+    }
+
     .pos-right {
         position : absolute;
         right: 0px;
     }
+
+    .login-state {
+        display: inline;
+    }
+
 
 
 

@@ -10,7 +10,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebServlet;
 import java.io.IOException;
-import java.io.PrintWriter;
 
 @WebServlet("/board/view")
 public class BoardViewServlet extends GenericServlet {
@@ -27,47 +26,20 @@ public class BoardViewServlet extends GenericServlet {
 
     @Override
     public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
-        res.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = res.getWriter();
-
-        req.getRequestDispatcher("/header").include(req, res);
 
 
         try {
-            out.println("<h1>게시글 조회</h1>");
 
             int boardNo = Integer.parseInt(req.getParameter("no"));
-
             Board board = boardDao.findBy(boardNo);
-            if (board == null) {
-                out.println("<p>없는 게시글입니다.</p>");
-                out.println("</body>");
-                out.println("</html>");
-                return;
-            }
+            req.setAttribute("board", board);
+            res.setContentType("text/html;charset=UTF-8");
+            req.getRequestDispatcher("/board/view.jsp").include(req, res);
 
-            board.setViewCount(board.getViewCount() + 1);
-            boardDao.updateViewCount(board.getNo(), board.getViewCount());
-            sqlSessionFactory.openSession(false).commit();
-
-            out.println("<form action='/board/update'>");
-            out.printf("        번호: <input readonly name='no' type='text' value='%d'><br>\n", board.getNo());
-            out.printf("        제목: <input name='title' type='text' value='%s'><br>\n", board.getTitle());
-            out.printf("        내용: <textarea name='content'>%s</textarea><br>\n", board.getContent()); //텍스트에이리어는 박스 사이에 타입을 지정
-            out.printf("        작성일: <input readonly type='text' value='%1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS'><br>\n", board.getCreatedDate());
-            out.printf("        조회수: <input readonly type='text' value='%d'><br>\n", board.getViewCount());
-            out.printf("        작성자: <input readonly type='text' value='%s'><br>\n", board.getWriter().getName());
-            out.println("        <button>변경</button>");
-            out.printf("        <button type='button' onclick='location.href=\"/board/delete?no=%d\"'>삭제</button>\n", board.getNo());
-            out.println("</form>");
 
         } catch (Exception e) {
-            sqlSessionFactory.openSession(false).rollback();
-            out.println("<p>조회 중 오류 발생!</p>");
-            e.printStackTrace();
+            req.setAttribute("exception", e);
+            req.getRequestDispatcher("/error.jsp").forward(req, res);
         }
-
-        out.println("</body>");
-        out.println("</html>");
     }
 }
