@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>게시물 작성</title>
+    <style>
+        .layout {
+            width: 500px;
+            margin: 0 auto;
+            margin-top: 40px;
+        }
+
+        .layout input, .layout textarea {
+            width: 100%;
+            box-sizing: border-box;
+            margin-top: 10px;
+        }
+
+        .layout textarea {
+            min-height: 300px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="layout">
+    <form id="write-form">
+        <input name="title" type="text" placeholder="제목">
+        <textarea name="content" placeholder="내용"></textarea>
+        <button type="submit">작성</button>
+    </form>
+</div>
+
+<script>
+    document.getElementById('write-form').onsubmit = function (event) {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+        const content = formData.get('content');
+
+        if (!content || content.trim() === '') {
+            alert('내용을 입력해야 합니다.');
+            return;
+        }
+
+        const data = {
+            title: formData.get('title'),
+            content: content,
+            completed: false  // 기본값을 false로 설정
+        };
+
+        fetch('/api/boards', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        }).then(() => {
+            alert('게시글이 작성되었습니다.');
+            window.location.href = '/boardlist.html';
+        });
+    };
+</script>
+
+</body>
+</html>

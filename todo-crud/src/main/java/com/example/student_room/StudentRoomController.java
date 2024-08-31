@@ -1,13 +1,13 @@
-package com.example.todo_crud;
+package com.example.student_room;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class TodoCrudApplication {
+public class StudentRoomController {
 
 	public static void main(String[] args) {
-		SpringApplication.run(TodoCrudApplication.class, args);
+		SpringApplication.run(StudentRoomController.class, args);
 	}
 
 }

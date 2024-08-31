@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>게시글 수정</title>
+    <style>
+        .layout {
+            width: 500px;
+            margin: 0 auto;
+            margin-top: 40px;
+            font-size: 20px;
+        }
+
+        .layout input, .layout textarea {
+            width: 100%;
+            box-sizing: border-box;
+            margin-top: 16px;
+        }
+
+        .layout textarea {
+            min-height: 300px;
+            font-size: 20px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="layout">
+    <form id="modify-form">
+        <input id="title" name="title" type="text" placeholder="제목">
+        <textarea id="content" name="content" placeholder="내용"></textarea>
+        <button type="submit">수정</button>
+    </form>
+</div>
+
+<script>
+    function getParameterByName(name) {
+        const url = new URL(window.location.href);
+        return url.searchParams.get(name);
+    }
+
+    window.onload = function () {
+        const id = getParameterByName('id');
+        fetch('/api/boards/' + id)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('title').value = data.title;
+                document.getElementById('content').value = data.content;
+            });
+
+        document.getElementById('modify-form').onsubmit = function (event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const data = {
+                title: formData.get('title'),
+                content: formData.get('content'),
+                completed: false  // 기본값을 false로 설정
+            };
+
+            fetch('/api/boards/' + id, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            }).then(() => {
+                alert('게시글이 수정되었습니다.');
+                window.location.href = '/boardlist.html';  // 수정 완료 후 목록 페이지로 리디렉션
+            });
+        };
+    };
+</script>
+
+</body>
+</html>

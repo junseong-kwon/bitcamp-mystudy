@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>게시글 상세 페이지</title>
+    <script>
+        function getParameterByName(name) {
+            const url = new URL(window.location.href);
+            return url.searchParams.get(name);
+        }
+
+        function confirmDelete() {
+            if (confirm("정말 삭제하시겠습니까?")) {
+                const id = getParameterByName('id');
+                fetch('/api/boards/' + id, {
+                    method: 'DELETE'
+                }).then(() => {
+                    alert('게시글이 삭제되었습니다.');
+                    window.location.href = '/boardlist.html';
+                });
+            }
+        }
+
+        window.onload = function () {
+            const id = getParameterByName('id');
+            fetch('/api/boards/' + id)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('title').innerText = data.title;
+                    document.getElementById('content').innerText = data.content;
+                });
+        };
+    </script>
+</head>
+<body>
+
+<h1 id="title">제목입니다.</h1>
+<p id="content">내용이 들어갈 부분입니다.</p>
+
+<div>
+    <button onclick="confirmDelete()">글삭제</button>
+    <button onclick="location.href='/boardmodify.html?id=' + getParameterByName('id')">수정</button>
+</div>
+
+</body>
+</html>

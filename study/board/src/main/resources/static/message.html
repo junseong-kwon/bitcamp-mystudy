@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>알림</title>
+</head>
+
+<body>
+<script>
+    function showMessageAndRedirect(message, url) {
+        alert(message);
+        window.location.href = url;
+    }
+
+    // 메시지와 URL을 직접 입력하거나, 서버에서 제공하는 데이터로 설정할 수 있습니다.
+    showMessageAndRedirect('작업이 완료되었습니다.', '/boardlist.html');
+</script>
+</body>
+</html>

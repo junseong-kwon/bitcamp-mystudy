@@ -2,116 +2,61 @@ package com.study.board.controller;
 
 import com.study.board.entity.Board;
 import com.study.board.service.BoardService;
-import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-@Controller
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/boards")
 public class BoardController {
 
-    @Autowired// BoardController에 BoardService객체를 생성해서 연결해준다.
+    @Autowired
     private BoardService boardService;
 
-    @PostMapping("/board/write") //localhost:8090/board/write에
-    public String boardWriteForm() { //boardwrite.html문서를 출력 하겠다는 뜻
+    @GetMapping
+    public ResponseEntity<List<Board>> getAllBoards() {
 
-        return "boardwrite";
+        List<Board> boards = boardService.findAllBoards();
+
+        return new ResponseEntity<>(boards, HttpStatus.OK);
     }
 
-    @PostMapping("/board/writepro") //PostMapping은 폼을 통해 데이터를 입력하고 제출할때 사용
-    public String boardWritePro(Board board, Model model) { // 보드 객체를 받고
-
-        boardService.write(board);
-
-            model.addAttribute("message", "글 작성이 완료되었습니다."); //메시지를 받은거 출력
-        model.addAttribute("searchUrl", "/board/list"); // 보내줄 위치 지정
-
-        return "message";
+    @GetMapping("/{id}")
+    public ResponseEntity<Board> getBoardById(@PathVariable("id") Integer id) {  // 여기에서 "id"를 명시적으로 지정
+        Board board = boardService.findBoardById(id);
+        return new ResponseEntity<>(board, HttpStatus.OK);
     }
 
-    @GetMapping("/board/list") //GetMapping은 웹 페이지를 로드하거나 데이터를 읽을때 사용
-    public String boardList(Model model) {
-
-        model.addAttribute("list", boardService.boardList()); // list라는 이름으로 보낼거야 보드 서비스의 보드 리스트를 리스트에 담아서 넘길거야
-
-        return "boardlist";
-    }
-
-    @GetMapping("/board/view") // localhost:8090/board/view?id=1
-    public String boardView(Model model, @RequestParam("id") Integer id) { //매개변수에서 다시 받아올떄는 Model을 적어줘야 한다.  1이 들어가서
-
-        model.addAttribute("board", boardService.boardView(id)); //게시글을 불러온다
-
-        return "boardview";
-    }
-
-    @PostMapping("/board/updateCompleted")
-    public String updateCompleted(@RequestParam("id") Integer id, @RequestParam(value = "completed", defaultValue = "false") Boolean completed, RedirectAttributes redirectAttributes) {
-        Board board = boardService.boardView(id);
-        if (board != null) {
-            board.setCompleted(completed);
-            boardService.write(board);
-            redirectAttributes.addFlashAttribute("message", "상태 업데이트 성공");
-        } else {
-            redirectAttributes.addFlashAttribute("message", "게시글을 찾을 수 없습니다.");
+    @PostMapping
+    public ResponseEntity<Board> createBoard(@RequestBody Board board) {
+        if (board.getContent() == null || board.getContent().trim().isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return "redirect:/board/list";
+
+        Board newBoard = boardService.saveBoard(board);
+        return new ResponseEntity<>(newBoard, HttpStatus.CREATED);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Board> updateBoard(@PathVariable("id") Integer id, @RequestBody Board board) {
+        Board existingBoard = boardService.findBoardById(id);
+        if (existingBoard == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
 
-    @GetMapping("/board/delete")
-        public String boardDelete(@RequestParam("id") Integer id, Model model) {
+        // 기존 데이터의 타이틀과 내용을 유지하고, 완료 상태만 업데이트하는 로직
+        existingBoard.setCompleted(board.getCompleted());
+        Board updatedBoard = boardService.saveBoard(existingBoard);
 
-        boardService.boardDelete(id);
-            if (true) {
-             model.addAttribute("message", "글 삭제가 완료되었습니다.");
-    //메시지를 받은거 출력
-            } else {
-            return "boardview";
-            }
-        model.addAttribute("searchUrl", "/board/list");
-
-        return "message";
+        return new ResponseEntity<>(updatedBoard, HttpStatus.OK);
     }
 
-    @GetMapping("/board/modify/{id}") //뒤에 있는 중괄호의 아이디가
-    public String boardModify(@PathVariable("id")  Integer id, Model model) { // PathVariable에 인식되서 Integer 형태의 id값으로 들어옴
-
-        model.addAttribute("board", boardService.boardView(id));
-
-        return "boardmodify";
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteBoard(@PathVariable("id") Integer id) {  // 여기에서 "id"를 명시적으로 지정
+        boardService.deleteBoard(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
-    // url의 파라미터를 넘길떄 방법은 2가지
-    //첫번째는 queryString을 쓰는 방법
-    //PathVariable을 통해서 값을 받아오는 방법이 있다.
-
-   @PostMapping("/board/update/{id}")
-    public String boardUpdate(@PathVariable("id") Integer id, Board board, Model model) {
-
-
-       boardService.write(board);
-
-        Board boardTemp = boardService.boardView(id);
-
-        boardTemp.setTitle(board.getTitle());
-        boardTemp.setContent(board.getContent());
-       boardService.write(boardTemp);
-
-
-       model.addAttribute("message", "글 수정이 완료되었습니다."); //메시지를 받은거 출력
-       model.addAttribute("searchUrl", "/board/list");
-
-
-        return "message";
-   }
-
-
-
-
 }
