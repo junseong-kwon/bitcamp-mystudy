@@ -16,35 +16,31 @@ import java.util.List;
 @WebServlet("/project/view")
 public class ProjectViewServlet extends GenericServlet {
 
-    private ProjectDao projectDao;
-    private UserDao userDao;
+  private ProjectDao projectDao;
+  private UserDao userDao;
 
-    @Override
-    public void init() throws ServletException {
-        // 서블릿 컨테이너 ---> init(ServletConfig) ---> init() 호출한다.
-        projectDao = (ProjectDao) this.getServletContext().getAttribute("projectDao");
-        userDao = (UserDao) this.getServletContext().getAttribute("userDao");
+  @Override
+  public void init() throws ServletException {
+    projectDao = (ProjectDao) this.getServletContext().getAttribute("projectDao");
+    userDao = (UserDao) this.getServletContext().getAttribute("userDao");
+  }
+
+  @Override
+  public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
+    try {
+      int projectNo = Integer.parseInt(req.getParameter("no"));
+      Project project = projectDao.findBy(projectNo);
+      req.setAttribute("project", project);
+
+      List<User> users = userDao.list();
+      req.setAttribute("users", users);
+
+      res.setContentType("text/html;charset=UTF-8");
+      req.getRequestDispatcher("/project/view.jsp").include(req, res);
+
+    } catch (Exception e) {
+      req.setAttribute("exception", e);
+      req.getRequestDispatcher("/error.jsp").forward(req, res);
     }
-
-    @Override
-    public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
-
-
-        try {
-            int projectNo = Integer.parseInt(req.getParameter("no"));
-            Project project = projectDao.findBy(projectNo);
-            req.setAttribute("project", project);
-
-            List<User> users = userDao.list();
-            req.setAttribute("users", users);
-            
-            res.setContentType("text/html;charset=UTF-8");
-            req.getRequestDispatcher("/project/view.jsp").include(req, res);
-
-        } catch (Exception e) {
-            req.setAttribute("exception", e);
-            req.getRequestDispatcher("/error.jsp").forward(req, res);
-        }
-    }
-
+  }
 }

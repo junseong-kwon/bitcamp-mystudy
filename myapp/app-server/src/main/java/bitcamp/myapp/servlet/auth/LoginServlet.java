@@ -13,39 +13,39 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-
 @WebServlet("/auth/login")
 public class LoginServlet extends GenericServlet {
 
-    private UserDao userDao;
+  private UserDao userDao;
 
-    @Override
-    public void init() throws ServletException {
-        userDao = (UserDao) this.getServletContext().getAttribute("userDao");
+  @Override
+  public void init() throws ServletException {
+    userDao = (UserDao) this.getServletContext().getAttribute("userDao");
+  }
+
+  @Override
+  public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
+    try {
+      String email = req.getParameter("email");
+      String password = req.getParameter("password");
+
+      User user = userDao.findByEmailAndPassword(email, password);
+      if (user == null) {
+        ((HttpServletResponse) res).setHeader("Refresh", "1;url=/auth/form");
+        res.setContentType("text/html;charset=UTF-8");
+        req.getRequestDispatcher("/auth/fail.jsp").include(req, res);
+        return;
+      }
+
+      HttpServletRequest httpReq = (HttpServletRequest) req;
+      HttpSession session = httpReq.getSession();
+      session.setAttribute("loginUser", user);
+      ((HttpServletResponse) res).sendRedirect("/");
+
+
+    } catch (Exception e) {
+      req.setAttribute("exception", e);
+      req.getRequestDispatcher("/error.jsp").forward(req, res);
     }
-
-    @Override
-    public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
-        try {
-            String email = req.getParameter("email");
-            String password = req.getParameter("password");
-
-            User user = userDao.findByEmailAndPassword(email, password);
-            if (user == null) {
-                ((HttpServletResponse) res).setHeader("Refresh", "1;url=/auth/form");
-                res.setContentType("text/html;charset=UTF-8");
-                req.getRequestDispatcher("/auth/fail.jsp").include(req, res);
-                return;
-            }
-
-            HttpServletRequest httpReq = (HttpServletRequest) req;
-            HttpSession session = httpReq.getSession();
-            session.setAttribute("loginUser", user);
-            ((HttpServletResponse) res).sendRedirect("/");
-
-        } catch (Exception e) {
-            req.setAttribute("exception", e);
-            req.getRequestDispatcher("/error.jsp").forward(req, res);
-        }
-    }
+  }
 }

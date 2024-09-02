@@ -1,4 +1,4 @@
- <%@ page 
+<%@ page
     language="java" 
     contentType="text/html;charset=UTF-8" 
     pageEncoding="UTF-8"
@@ -29,19 +29,18 @@ if (project == null) {
 <p>없는 프로젝트입니다.</p>
 
 <%
-}else {
-  List<User> users = (List<User>) request.getAttribute("users");
-  %>
+} else {
+    List<User> users = (List<User>) request.getAttribute("users");
+%>
 
-          
 <form action='/project/update'>
     번호: <input readonly name='no' type='text' value='<%=project.getNo()%>'><br>
     프로젝트명: <input name='title' type='text' value='<%=project.getTitle()%>'><br>
     설명: <textarea name='description'><%=project.getDescription()%></textarea><br>
-    기간: 
-          <input name='startDate' type='date' value='<%=project.getStartDate()%>'>~
-          <input name='endDate' type='date' value='<%=project.getEndDate()%>'><br>
-     팀원:<br>
+    기간:
+        <input name='startDate' type='date' value='<%=project.getStartDate()%>'> ~
+        <input name='endDate' type='date' value='<%=project.getEndDate()%>'><br>
+    팀원:<br>
         <ul>
 <%
       for (User user : users) {
@@ -65,4 +64,3 @@ if (project == null) {
 
 </body>
 </html>
-

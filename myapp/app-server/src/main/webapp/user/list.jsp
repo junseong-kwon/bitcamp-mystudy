@@ -1,4 +1,4 @@
- <%@ page 
+<%@ page
     language="java" 
     contentType="text/html;charset=UTF-8" 
     pageEncoding="UTF-8"
@@ -8,12 +8,11 @@
 
 <jsp:include page="/header.jsp"/>
 
-
 <h1>회원 목록</h1>
 <p><a href='/user/form'>새 회원</a></p>
 <table>
   <thead>
-        <tr><th>번호</th><th>이름</th><th>이메일</th></tr>
+      <tr><th>번호</th><th>이름</th><th>이메일</th></tr>
   </thead>
   <tbody>
 <%
@@ -28,10 +27,9 @@ for (User user : list) {
 <%
 }
 %>
-   </tbody>
- </table>
+  </tbody>
+</table>
 
 
 </body>
 </html>
-

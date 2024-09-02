@@ -1,10 +1,9 @@
- <%@ page 
+<%@ page
     language="java" 
     contentType="text/html;charset=UTF-8" 
     pageEncoding="UTF-8"
     trimDirectiveWhitespaces="true"%>
 <%@ page import="bitcamp.myapp.vo.User"%>
-<%@ page import="java.util.List"%>
 
 <jsp:include page="/header.jsp"/>
 
@@ -15,13 +14,12 @@ User user = (User) request.getAttribute("user");
 if (user == null) {
 %>
 
-  <p>없는 회원입니다.</p>
+<p>없는 회원입니다.</p>
 
 <%
-}else {
-  %>
+} else {
+%>
 
-          
 <form action='/user/update'>
     번호: <input name='no' readonly type='text' value='<%=user.getNo()%>'><br>
     이름: <input name='name' type='text' value='<%=user.getName()%>'><br>
@@ -31,10 +29,10 @@ if (user == null) {
     <button>변경</button>
     <button type='button' onclick='location.href="/user/delete?no=<%=user.getNo()%>"'>삭제</button>
 </form>
+
 <%
 }
 %>
 
-</head>
-<body>
-
+</body>
+</html>

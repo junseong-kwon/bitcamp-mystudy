@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Card</title>
+    <link rel="stylesheet" href="/css/stylePop.css">
+</head>
+<body>
+<div class="profile-card">
+    <div class="profile-header">
+        <span class="seat-number">No. 1</span>
+        <span class="status online">온라인</span>
+    </div>
+    <div class="profile-picture" onclick="triggerUpload()">
+        <img id="profile-img" src="default-avatar.png" alt="Profile Image">
+        <input type="file" id="file-input" accept="image/*" onchange="uploadImage()" hidden>
+    </div>
+    <div class="profile-info">
+        <h2 onclick="openProfileModal()">강슬기</h2>
+        <div class="profile-status">
+            <span class="comprehension-status good"></span>
+        </div>
+    </div>
+</div>
+
+<div id="save-message" style="display:none; color: green;">저장되었습니다 </div>
+
+<!-- 프로필 정보 모달 -->
+<div id="profile-modal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <div class="header-info">
+                <img id="modal-profile-img" src="default-avatar.png" alt="Profile Image" class="modal-profile-img">
+                <h2>강슬기</h2>
+            </div>
+            <div class="status-indicator">
+                <span class="status-icon online"></span> <!-- 상태에 따라 online, offline 클래스를 변경 -->
+                <span>온라인</span> <!-- 상태에 따라 '온라인' 또는 '오프라인' -->
+            </div>
+        </div>
+        <div class="profile-details">
+            <p><strong>이름:</strong> <span contenteditable="true">강슬기</span></p>
+            <p><strong>이메일:</strong> <span contenteditable="true">example@example.com</span></p>
+            <p><strong>GitHub:</strong> <span contenteditable="true"><a href="https://github.com/username" target="_blank">https://github.com/username</a></span></p>
+            <p><strong>핸드폰 번호:</strong>
+                <span id="phone-number" contenteditable="true">010-1234-5678</span>
+                <label>
+                    <input type="checkbox" id="phone-visibility" checked> 공개
+                </label>
+            </p>
+            <p><strong>소개 메시지:</strong> <span contenteditable="true">카톡 상세 메시지</span></p>
+            <button onclick="saveProfile()">저장</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function triggerUpload() {
+        document.getElementById('file-input').click();
+    }
+
+    function uploadImage() {
+        const fileInput = document.getElementById('file-input');
+        const file = fileInput.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                // 업로드된 이미지가 바깥과 팝업창에 동시에 반영되도록 함
+                document.getElementById('profile-img').src = e.target.result;
+                document.getElementById('modal-profile-img').src = e.target.result;
+            }
+            reader.readAsDataURL(file);
+        }
+    }
+
+
+
+    function openProfileModal() {
+        document.getElementById('profile-modal').style.display = 'block';
+    }
+
+    function closeProfileModal() {
+        document.getElementById('profile-modal').style.display = 'none';
+    }
+
+    // 팝업창 외부를 클릭하면 모달 닫기
+    window.onclick = function(event) {
+        const modal = document.getElementById('profile-modal');
+        if (event.target == modal) {
+            closeProfileModal();
+        }
+    }
+
+    // 핸드폰 번호 공개/비공개 설정에 따라 번호를 숨기거나 표시
+    document.getElementById('phone-visibility').addEventListener('change', function() {
+        const phoneNumber = document.getElementById('phone-number');
+        if (this.checked) {
+            phoneNumber.style.visibility = 'visible';
+        } else {
+            phoneNumber.style.visibility = 'hidden';
+        }
+    });
+
+    function saveProfile() {
+
+            count messageElement = document.getElementById('save-message');
+            messageElement.style.display = 'block';
+
+            setTimeout(function() {
+            messageElement.style.display = 'none';
+            }, 3000);
+
+            alert('저장되었습니다');
+    }
+</script>
+</body>
+</html>
