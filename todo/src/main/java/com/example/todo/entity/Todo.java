@@ -9,17 +9,25 @@ public class Todo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     private String title;
     private String description;
     private boolean completed;
 
-    public Integer getId() {
+    public Todo() {}
+
+    public Todo(String title, String description, boolean completed){
+        this.title = title;
+        this.description = description;
+        this.completed = completed;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

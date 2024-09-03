@@ -35,12 +35,9 @@
                 <h2>강슬기</h2>
             </div>
             <div class="status-indicator">
-                <span class="status-icon online"></span> <!-- 상태에 따라 online, offline 클래스를 변경 -->
-                <span>온라인</span> <!-- 상태에 따라 '온라인' 또는 '오프라인' -->
             </div>
         </div>
         <div class="profile-details">
-            <p><strong>이름:</strong> <span contenteditable="true">강슬기</span></p>
             <p><strong>이메일:</strong> <span contenteditable="true">example@example.com</span></p>
             <p><strong>GitHub:</strong> <span contenteditable="true"><a href="https://github.com/username" target="_blank">https://github.com/username</a></span></p>
             <p><strong>핸드폰 번호:</strong>
@@ -103,17 +100,6 @@
         }
     });
 
-    function saveProfile() {
-
-            count messageElement = document.getElementById('save-message');
-            messageElement.style.display = 'block';
-
-            setTimeout(function() {
-            messageElement.style.display = 'none';
-            }, 3000);
-
-            alert('저장되었습니다');
-    }
 </script>
 </body>
 </html>
