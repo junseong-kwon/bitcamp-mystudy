@@ -25,7 +25,7 @@ import javax.servlet.http.Part;
 //
 // 2) 애노테이션으로 설정하기
 //
-@MultipartConfig(maxFileSize = 1024 * 1024 * 10)
+@MultipartConfig(maxFileSize = 1024 * 1024 * 10) //한 파일 당 10 메가바이트
 @WebServlet("/ex04/s5")
 public class Servlet05 extends GenericServlet {
 
@@ -65,6 +65,7 @@ public class Servlet05 extends GenericServlet {
     // 파일 데이터는 getPart()를 이용한다.
     Part photoPart = httpReq.getPart("photo");
     if (photoPart.getSize() > 0) {
+      out.printf("원래 파일명: %s<br>\n", photoPart.getSubmittedFileName());
       // 파일을 선택해서 업로드 했다면,
       String filename = UUID.randomUUID().toString();
       photoPart.write(this.uploadDir + "/" + filename);

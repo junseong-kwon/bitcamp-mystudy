@@ -1,3 +1,4 @@
+/* Body 스타일 */
 body {
     background-color: #f4f4f9;
     display: flex;
@@ -8,6 +9,7 @@ body {
     font-family: Arial, sans-serif;
 }
 
+/* 프로필 카드 스타일 */
 .profile-card {
     background-color: #fff;
     border-radius: 15px;
@@ -17,6 +19,7 @@ body {
     text-align: center;
 }
 
+/* 프로필 헤더 */
 .profile-header {
     display: flex;
     justify-content: space-between;
@@ -25,11 +28,13 @@ body {
     background-color: #f7f7f7;
 }
 
+/* 좌석 번호 */
 .seat-number {
     font-size: 16px;
     color: #333;
 }
 
+/* 상태 */
 .status {
     font-size: 14px;
     padding: 3px 8px;
@@ -49,24 +54,26 @@ body {
     background-color: #dc3545;
 }
 
+/* 프로필 사진 */
 .profile-picture {
     position: relative;
     cursor: pointer;
     overflow: hidden;
-    width: 50px; /* 적절한 크기로 고정 */
-    height: 50px; /* 프로필 사진의 높이 고정 */
-    margin: 0 auto; /* 가운데 정렬 */
-    border-radius: 50%; /* 원형으로 만들기 */
-    border: 2px solid #ddd; /* 외곽선 추가 */
+    width: 50px;
+    height: 50px;
+    margin: 0 auto;
+    border-radius: 50%;
+    border: 2px solid #ddd;
 }
 
 .profile-picture img {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* 이미지가 프로필 영역에 맞게 채워지도록 설정 */
-    border-radius: 50%; /* 원형으로 만들기 */
+    object-fit: cover;
+    border-radius: 50%;
 }
 
+/* 프로필 정보 */
 .profile-info {
     padding: 5px;
 }
@@ -78,6 +85,7 @@ body {
     cursor: pointer;
 }
 
+/* 상태 표시 */
 .profile-status {
     display: flex;
     justify-content: center;
@@ -99,6 +107,7 @@ body {
     background-color: #dc3545;
 }
 
+/* 모달 스타일 */
 .modal {
     display: none;
     position: fixed;
@@ -121,17 +130,18 @@ body {
     border-radius: 10px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     position: relative;
-    background-image: url('your-pattern.png'); /* 그래픽 패턴 이미지 추가 */
+    background-image: url('your-pattern.png'); /* 그래픽 패턴 이미지 */
     background-size: cover;
 }
 
+/* 모달 헤더 */
 .modal-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 10px;
     border-bottom: 1px solid #ddd;
-    background-color: rgba(247, 247, 247, 0.8); /* 반투명 배경색 */
+    background-color: rgba(247, 247, 247, 0.8);
 }
 
 .header-info {
@@ -142,7 +152,7 @@ body {
 .modal-profile-img {
     width: 50px;
     height: 50px;
-  object-fit: cover;
+    object-fit: cover;
     border-radius: 50%;
     margin-right: 10px;
 }
@@ -153,6 +163,7 @@ body {
     color: #333;
 }
 
+/* 상태 인디케이터 */
 .status-indicator {
     display: flex;
     align-items: center;
@@ -173,15 +184,32 @@ body {
     background-color: #dc3545;
 }
 
+/* 모달 내 프로필 상세 정보 정렬 */
 .profile-details {
     padding: 15px;
     text-align: left;
 }
 
+/* 프로필 정보의 균일한 정렬 */
 .profile-details p {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
     margin: 5px 0;
     font-size: 14px;
     color: #555;
+}
+
+.profile-details strong {
+    min-width: 70px; /* 텍스트 라벨의 최소 폭 */
+    margin-right: 8px; /* 라벨과 텍스트 상자 사이의 간격 */
+    text-align: right; /* 라벨 텍스트를 오른쪽 정렬 */
+}
+
+.profile-details span[contenteditable="true"] {
+    flex-grow: 1;
+    border-bottom: 1px solid #ccc; /* 아래에 밑줄 */
+    padding: 2px;
 }
 
 .profile-details a {
@@ -193,6 +221,7 @@ body {
     text-decoration: underline;
 }
 
+/* 버튼 스타일 */
 button {
     margin-top: 10px;
     padding: 5px 10px;

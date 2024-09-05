@@ -50,7 +50,8 @@ repositories {
 dependencies {
   // 미디어 파일에서 메타 정보(위도/경도, 해상도 등) 추출
   
-
+// Apache multipart-formdata 라이브러리
+implementation 'commons-fileupload:commons-fileupload:1.5'
 
 implementation libs.guava
     

@@ -121,6 +121,10 @@ public class Servlet04 extends GenericServlet {
 
           // 임시 폴더에 저장된 파일을 지정된 파일 경로로 옮긴다.
           part.write(file);
+          
+          //원래의 파일 이름 출력
+        
+          
 
           paramMap.put(part.getFieldName(), // 클라이언트가 보낸 파라미터 이름
               filename // 파일 이름

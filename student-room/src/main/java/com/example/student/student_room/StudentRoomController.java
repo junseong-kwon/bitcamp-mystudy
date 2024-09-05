@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class StudentRoomController {
 
-    @GetMapping("/student-room")
+    @GetMapping("/api/student-room")
     public String showStudentRoomPop() {
-        return "studentRoomPop";
+        return "studentRoomPop.html";
     }
 }

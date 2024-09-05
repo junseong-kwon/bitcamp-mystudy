@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile Card</title>
     <link rel="stylesheet" href="/css/stylePop.css">
 </head>
@@ -24,7 +23,6 @@
     </div>
 </div>
 
-<div id="save-message" style="display:none; color: green;">저장되었습니다 </div>
 
 <!-- 프로필 정보 모달 -->
 <div id="profile-modal" class="modal">
@@ -38,16 +36,15 @@
             </div>
         </div>
         <div class="profile-details">
-            <p><strong>이메일:</strong> <span contenteditable="true">example@example.com</span></p>
-            <p><strong>GitHub:</strong> <span contenteditable="true"><a href="https://github.com/username" target="_blank">https://github.com/username</a></span></p>
-            <p><strong>핸드폰 번호:</strong>
+            <p><strong>이메일</strong> <span contenteditable="true">example@example.com</span></p>
+            <p><strong>GitHub</strong> <span contenteditable="true"><a href="https://github.com/username" target="_blank">https://github.com/username</a></span></p>
+            <p><strong>핸드폰 번호</strong>
                 <span id="phone-number" contenteditable="true">010-1234-5678</span>
                 <label>
                     <input type="checkbox" id="phone-visibility" checked> 공개
                 </label>
             </p>
-            <p><strong>소개 메시지:</strong> <span contenteditable="true">카톡 상세 메시지</span></p>
-            <button onclick="saveProfile()">저장</button>
+            <p><strong>소개 메시지</strong> <span contenteditable="true">카톡 상세 메시지</span></p>
         </div>
     </div>
 </div>
