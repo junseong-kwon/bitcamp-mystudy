@@ -16,7 +16,7 @@ Project project = (Project) session.getAttribute("project");
 if (project == null) {
 %>
 
-<p>등록할 프로젝트 정보가 없습니다..</p>
+<p>등록할 프로젝트 정보가 없습니다.</p>
 
 <%
 } else {
@@ -24,21 +24,19 @@ if (project == null) {
 <form action='/project/add' method="post">
     프로젝트명: <%=project.getTitle()%><br>
     설명: <textarea><%=project.getDescription()%></textarea><br>
-    기간: <%=project.getStartDate()%> ~ <%=project.getEndDate()%>'><br>
+    기간: <%=project.getStartDate()%> ~ <%=project.getEndDate()%><br>
     팀원:<br>
         <ul>
 <%
       for (User user : project.getMembers()) {
 %>
-          <li><%=user.getName()%>(<%=user.getEmail()%></li>
+          <li><%=user.getName()%>(<%=user.getEmail()%>)</li>
 <%
       }
 %>
         </ul>
     <button>등록</button>
-
 </form>
-
 <%
 }
 %>
