@@ -15,6 +15,7 @@ String[] names = {"홍길동", "임꺽정", "유관순"};
 <%for (String name : names) {%>
 <li><%=name%></li>
 <%}%>
+
 </ul>
 </body>
 </html>

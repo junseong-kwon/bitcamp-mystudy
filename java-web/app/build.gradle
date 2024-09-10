@@ -58,6 +58,8 @@ implementation libs.guava
     
 implementation 'org.apache.tomcat.embed:tomcat-embed-jasper:9.0.93'
 
+implementation 'javax.servlet:jstl:1.2'
+
 
   // Spring IoC 컨테이너
  // implementation 'org.springframework:spring-context:6.1.4'

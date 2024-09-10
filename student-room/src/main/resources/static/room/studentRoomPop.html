@@ -9,12 +9,11 @@
 <script src="../js/studentRoomPop.js"></script>
 <div class="card-container">
     <div class="profile-card">
-        <div class="profile-header">
+        <div class="profile-card-header">
             <span class="seat-number">No. 1</span>
         </div>
         <div class="profile-picture" onclick="triggerUpload('file-input')">
             <img id="profile-img" src="/image/image.jpg" alt="Profile Image">
-            <input type="file" id="file-input" accept="image/*" onchange="uploadImage('profile-img', 'modal-profile-img', 'file-input')" hidden>
         </div>
         <div class="profile-info">
             <h2 onclick="openProfileModal('profile-modal')">강슬기</h2>
@@ -24,42 +23,59 @@
         </div>
     </div>
 
-    <div class="profile-card1">
-        <div class="profile-header1">
+    <div class="online-profile-card">
+        <div class="online-profile-header">
             <span class="seat-number">No. 2</span>
             <span class="status online">온라인</span>
         </div>
         <div class="profile-picture" onclick="triggerUpload('file-input')">
-            <img id="profile-img1" src="/image/test.jpg" alt="Profile Image">
-            <input type="file" id="file-input1" accept="image/*" onchange="uploadImage('profile-img', 'modal-profile-img', 'file-input')" hidden>
+            <img id="online-profile-img" src="/image/test.jpg" alt="Profile Image">
         </div>
         <div class="profile-info">
             <h2 onclick="openProfileModal('profile-modal1')">권준성</h2>
             </div>
         </div>
+
+
+<div class="offline-profile-card">
+    <div class="offline-profile-header">
+        <span class="seat-number">No. 3</span>
+        <span class="status offline">오프라인</span>
     </div>
+    <div class="profile-picture" onclick="triggerUpload('file-input')">
+        <img id="offline-profile-img" src="/image/xxx.jpg" alt="Profile Image">
+    </div>
+    <div class="profile-info2">
+        <h2 onclick="openProfileModal('profile-modal2')">최동인</h2>
+    </div>
+</div>
+</div>
 
 
     <!-- 모달 1 -->
     <div id="profile-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
+                <div class="modal-live">
+                    <a href="#"><span class="live" onclick="alert('자리이동 하시겠습니까?')">
+                        자리이동</span></a>
+                </div>
                 <div class="header-info">
                     <img id="modal-profile-img" src="/image/image.jpg" alt="Profile Image" class="modal-profile-img">
                 </div>
                 <div class="status-indicator"></div>
             </div>
-            <div class="profile-details">
-                <p><strong>이름:</strong></p>
-                <p>강슬기</p>
-                <p><strong>이메일:</strong></p>
+            <div class ="profile-details">
+                <strong>이름:</strong>
+                    <p>강슬기</p>
+                <strong>이메일:</strong>
                     <p>example@example.com</p>
-                <p><strong>GitHub:</strong> </p>
+                <strong>GitHub:</strong>
                 <p><a href="https://github.com/username" target="_blank">https://github.com/username</a></p>
-                <p><strong>핸드폰 번호:</strong></p>
+                <strong>핸드폰 번호:</strong>
                     <p><span id="phone-number1">010-1234-5678</span></p>
-                <p><strong>소개 메시지:</strong></p>
-                <p>카톡 상세 메시지</p>
+                <strong>소개 메시지:</strong>
+                <textarea readonly rows=10 cols=26>카톡 상세 메시지</textarea>
             </div>
         </div>
     </div>
@@ -67,26 +83,53 @@
 <div id="profile-modal1" class="modal">
     <div class="modal-content">
         <div class="modal-header">
+            <div class="modal-live">
+                <span class="live" onclick="alert">자리이동</span>
+            </div>
             <div class="header-info">
                 <img id="modal1-profile-img" src="/image/test.jpg" alt="Profile Image" class="modal-profile-img">
             </div>
             <div class="status-indicator"></div>
         </div>
         <div class="profile-details">
-            <p><strong>이름:</strong></p>
+            <strong>이름:</strong>
             <p>권준성</p>
-            <p><strong>이메일:</strong></p>
+            <strong>이메일:</strong>
             <p>example@example.com</p>
-            <p><strong>GitHub:</strong></p>
+            <strong>GitHub:</strong>
             <p><a href="https://github.com/username" target="_blank">https://github.com/username</a></p>
-            <p><strong>핸드폰 번호:</strong></p>
-            <p><span id="phone-number2">010-1234-5678</span></p>
-            <p><strong>소개 메시지:</strong></p>
-            <p>카톡 상세 메시지</p>
+            <strong>핸드폰 번호:</strong>
+            <p><span id="phone-number2">010-3333-5678</span></p>
+            <strong>소개 메시지:</strong>
+            <textarea readonly rows=10 cols=26>카톡 상세 메시지</textarea>
         </div>
     </div>
 </div>
 
-
+<div id="profile-modal2" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <div class="modal-live">
+                <span class="live">자리이동</span>
+            </div>
+            <div class="header-info">
+                <img id="modal2-profile-img" src="/image/xxx.jpg" alt="Profile Image" class="modal-profile-img">
+            </div>
+            <div class="status-indicator"></div>
+        </div>
+        <div class="profile-details">
+            <strong>이름:</strong>
+            <p>최동인</p>
+            <strong>이메일:</strong>
+            <p>example@example.com</p>
+            <strong>GitHub:</strong>
+            <p><a href="https://github.com/username" target="_blank">https://github.com/username</a></p>
+            <strong>핸드폰 번호:</strong>
+            <p><span id="phone-number3">010-3333-5678</span></p>
+            <strong>소개 메시지:</strong>
+            <textarea readonly rows=10 cols=26>카톡 상세 메시지</textarea>
+        </div>
+    </div>
+</div>
 </body>
 </html>
