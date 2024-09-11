@@ -118,6 +118,4 @@
         delete from myapp_board_files
         where board_id = #{boardNo}
     </delete>
-
-
 </mapper>

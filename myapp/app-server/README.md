@@ -1,12 +1,13 @@
-# 54. 파일 업로드 다루기 - multipart/form-data POST 요청 처리
+# 56. 비즈니스 로직 분리하기 - 서비스 컴포넌트 도입
 
 ## 학습목표
 
-- Servlet API를 이용하여 multipart/form-data 파라미터를 다룰 수 있다.
+- 서비스 컴포넌트의 역할을 이해하고 구현할 수 있다.
+- 인터페이스와 구현을 분리하는 이유를 설명할 수 있다.
 
 ## 요구사항
 
-- 게시글에 첨부 파일 기능을 추가하라.
+- 서블릿 클래스에서 비즈니스 로직을 분리하라.
 
 ## 실행 결과
 
@@ -14,18 +15,12 @@
 
 ## 작업
 
-- 첨부 파일 데이터를 저장할 테이블 정의
-  - myapp_board_files 테이블 정의
-- 게시글 입력폼에 첨부파일 선택 기능 추가
-  - /board/form.jsp 변경
-  - /board/view.jsp 변경
-- 첨부파일 도메인 클래스 추가
-  - AttachedFile 클래스 생성
-  - Board 클래스에 첨부파일 필드 추가
-- BoardDao 클래스 변경
-  - insertFiles() 메서드 추가
-- BoardDaoMapper 파일 변경
-  - "insertFiles" SQL 문 추가
+- 서비스 컴포넌트 추가
+  - BoardService 인터페이스와 DefaultBoardService 구현체 생성
+  - UserService 인터페이스와 DefaultUserService 구현체 생성
+  - ProjectService 인터페이스와 DefaultProjectService 구현체 생성
+- 서블릿 클래스 변경
+  - DAO 대신 서비스 컴포넌트를 사용하도록 변경
 
 ## 소스 파일
 

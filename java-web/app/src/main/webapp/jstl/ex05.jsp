@@ -28,6 +28,12 @@
 <c:if test="${age >= 19}">
     <p>성년입니다.</p>
 </c:if>
+<c:if test="${gender == 'man'}">
+    <p>남성입니다..</p>
+</c:if>
+<c:if test="${gender == 'woman'}">
+    <p>여성입니다.</p>
+</c:if>
 <hr>
 
 <h2>조건문의 결과를 보관소에 저장하기</h2>
@@ -35,7 +41,7 @@
 var 속성으로 변수이름을 설정하면, 조건문의 테스트 결과는 지정된 이름으로 보관소에 저장된다.
 </pre>
 <c:if test="${gender == 'woman'}" var="r1"/>
-${r1}<br>
+${pageScope.r1}<br>
 ${pageScope.r1 ? "여성" : "남성"}<br>
 
 </body>
