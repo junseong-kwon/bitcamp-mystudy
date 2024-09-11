@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import rutanImage from "./image/rutan.jpg";
 import {
   Avatar,
   Card,
@@ -11,6 +10,7 @@ import {
   DialogContent,
   Button,
 } from "@mui/material";
+
 
 // 프로필 카드 컴포넌트
 function ProfileCard({ seatNumber, name, imgSrc, status, openModal }) {
@@ -41,7 +41,6 @@ function ProfileCard({ seatNumber, name, imgSrc, status, openModal }) {
             onClick={() => openModal(name)}
           />
         </Badge>
-
         <Typography variant="h6" onClick={() => openModal(name)}>
           {name}
         </Typography>
@@ -77,7 +76,7 @@ export default function StudentRoom() {
       <ProfileCard
         seatNumber="1"
         name="강슬기"
-        imgSrc={rutanImage}
+        imgSrc=""
         status="online"
         openModal={openProfileModal}
       />
@@ -91,7 +90,7 @@ export default function StudentRoom() {
       <ProfileCard
         seatNumber="3"
         name="최동인"
-        imgSrc="https://via.placeholder.com/50"
+        imgSrc="/image/rutan.jpg"
         status="offline"
         openModal={openProfileModal}
       />
