@@ -177,7 +177,7 @@ export default function StudentRoom() {
             }}
             variant="h6"
           >
-            <strong>이름:</strong> {currentProfile.name}
+            <strong>이름:</strong> 
           </Typography>
           <Typography
             sx={{

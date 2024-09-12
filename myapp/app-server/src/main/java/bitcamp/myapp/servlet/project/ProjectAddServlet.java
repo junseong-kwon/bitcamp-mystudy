@@ -13,24 +13,23 @@ import java.io.IOException;
 @WebServlet("/project/add")
 public class ProjectAddServlet extends HttpServlet {
 
-  private ProjectService projectService;
+    private ProjectService projectService;
 
-  @Override
-  public void init() throws ServletException {
-    this.projectService = (ProjectService) this.getServletContext().getAttribute("projectService");
-  }
-
-  @Override
-  protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-    try {
-      Project project = (Project) req.getSession().getAttribute("project");
-      projectService.add(project);
-      req.getSession().removeAttribute("project");
-      res.sendRedirect("/project/list");
-
-    } catch (Exception e) {
-      req.setAttribute("exception", e);
-      req.getRequestDispatcher("/error.jsp").forward(req, res);
+    @Override
+    public void init() throws ServletException {
+        this.projectService = (ProjectService) this.getServletContext().getAttribute("projectService");
     }
-  }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+        try {
+            Project project = (Project) req.getSession().getAttribute("project");
+            projectService.add(project);
+            req.getSession().removeAttribute("project");
+            req.setAttribute("viewName", "redirect:list");
+
+        } catch (Exception e) {
+            req.setAttribute("exception", e);
+        }
+    }
 }

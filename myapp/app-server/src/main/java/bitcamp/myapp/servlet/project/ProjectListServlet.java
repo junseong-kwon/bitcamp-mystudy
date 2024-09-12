@@ -14,25 +14,23 @@ import java.util.List;
 @WebServlet("/project/list")
 public class ProjectListServlet extends HttpServlet {
 
-  private ProjectService projectService;
+    private ProjectService projectService;
 
-  @Override
-  public void init() throws ServletException {
-    projectService = (ProjectService) this.getServletContext().getAttribute("projectService");
-  }
-
-  @Override
-  protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-    try {
-      List<Project> list = projectService.list();
-      req.setAttribute("list", list);
-
-      res.setContentType("text/html;charset=UTF-8");
-      req.getRequestDispatcher("/project/list.jsp").include(req, res);
-
-    } catch (Exception e) {
-      req.setAttribute("exception", e);
-      req.getRequestDispatcher("/error.jsp").forward(req, res);
+    @Override
+    public void init() throws ServletException {
+        projectService = (ProjectService) this.getServletContext().getAttribute("projectService");
     }
-  }
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+        try {
+            List<Project> list = projectService.list();
+            req.setAttribute("list", list);
+            req.setAttribute("viewName", "/project/list.jsp");
+
+
+        } catch (Exception e) {
+            req.setAttribute("exception", e);
+        }
+    }
 }

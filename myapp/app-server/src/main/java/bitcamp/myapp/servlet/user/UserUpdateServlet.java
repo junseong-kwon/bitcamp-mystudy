@@ -13,33 +13,32 @@ import java.io.IOException;
 @WebServlet("/user/update")
 public class UserUpdateServlet extends HttpServlet {
 
-  private UserService userService;
+    private UserService userService;
 
-  @Override
-  public void init() throws ServletException {
-    this.userService = (UserService) this.getServletContext().getAttribute("userService");
-  }
-
-  @Override
-  protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-    try {
-      User user = new User();
-      user.setNo(Integer.parseInt(req.getParameter("no")));
-      user.setName(req.getParameter("name"));
-      user.setEmail(req.getParameter("email"));
-      user.setPassword(req.getParameter("password"));
-      user.setTel(req.getParameter("tel"));
-
-      if (userService.update(user)) {
-        res.sendRedirect("/user/list");
-      } else {
-        throw new Exception("없는 회원입니다!");
-      }
-
-    } catch (Exception e) {
-      req.setAttribute("exception", e);
-      req.getRequestDispatcher("/error.jsp").forward(req, res);
+    @Override
+    public void init() throws ServletException {
+        this.userService = (UserService) this.getServletContext().getAttribute("userService");
     }
-  }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+        try {
+            User user = new User();
+            user.setNo(Integer.parseInt(req.getParameter("no")));
+            user.setName(req.getParameter("name"));
+            user.setEmail(req.getParameter("email"));
+            user.setPassword(req.getParameter("password"));
+            user.setTel(req.getParameter("tel"));
+
+            if (userService.update(user)) {
+                req.setAttribute("viewName", "redirect:list");
+            } else {
+                throw new Exception("없는 회원입니다!");
+            }
+
+        } catch (Exception e) {
+            req.setAttribute("exception", e);
+        }
+    }
 
 }

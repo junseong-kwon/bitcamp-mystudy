@@ -16,41 +16,40 @@ import java.util.ArrayList;
 @WebServlet("/project/update")
 public class ProjectUpdateServlet extends HttpServlet {
 
-  private ProjectService projectService;
+    private ProjectService projectService;
 
-  @Override
-  public void init() throws ServletException {
-    this.projectService = (ProjectService) this.getServletContext().getAttribute("projectService");
-  }
-
-  @Override
-  protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-    try {
-      Project project = new Project();
-      project.setNo(Integer.parseInt(req.getParameter("no")));
-      project.setTitle(req.getParameter("title"));
-      project.setDescription(req.getParameter("description"));
-      project.setStartDate(Date.valueOf(req.getParameter("startDate")));
-      project.setEndDate(Date.valueOf(req.getParameter("endDate")));
-
-      String[] memberNos = req.getParameterValues("member");
-      if (memberNos != null) {
-        ArrayList<User> members = new ArrayList<>();
-        for (String memberNo : memberNos) {
-          members.add(new User(Integer.parseInt(memberNo)));
-        }
-        project.setMembers(members);
-      }
-
-      if (!projectService.update(project)) {
-        throw new Exception("없는 프로젝트입니다!");
-      }
-      res.sendRedirect("/project/list");
-
-    } catch (Exception e) {
-      req.setAttribute("exception", e);
-      req.getRequestDispatcher("/error.jsp").forward(req, res);
+    @Override
+    public void init() throws ServletException {
+        this.projectService = (ProjectService) this.getServletContext().getAttribute("projectService");
     }
-  }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+        try {
+            Project project = new Project();
+            project.setNo(Integer.parseInt(req.getParameter("no")));
+            project.setTitle(req.getParameter("title"));
+            project.setDescription(req.getParameter("description"));
+            project.setStartDate(Date.valueOf(req.getParameter("startDate")));
+            project.setEndDate(Date.valueOf(req.getParameter("endDate")));
+
+            String[] memberNos = req.getParameterValues("member");
+            if (memberNos != null) {
+                ArrayList<User> members = new ArrayList<>();
+                for (String memberNo : memberNos) {
+                    members.add(new User(Integer.parseInt(memberNo)));
+                }
+                project.setMembers(members);
+            }
+
+            if (!projectService.update(project)) {
+                throw new Exception("없는 프로젝트입니다!");
+            }
+            req.setAttribute("viewName", "redirect:list");
+
+        } catch (Exception e) {
+            req.setAttribute("exception", e);
+        }
+    }
 
 }
