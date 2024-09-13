@@ -1,20 +1,30 @@
 package bitcamp.myapp.listener;
 
+import bitcamp.myapp.controller.AuthController;
+import bitcamp.myapp.controller.BoardController;
+import bitcamp.myapp.controller.ProjectController;
+import bitcamp.myapp.controller.UserController;
 import bitcamp.myapp.dao.BoardDao;
 import bitcamp.myapp.dao.DaoFactory;
 import bitcamp.myapp.dao.ProjectDao;
 import bitcamp.myapp.dao.UserDao;
-import bitcamp.myapp.service.*;
+import bitcamp.myapp.service.BoardService;
+import bitcamp.myapp.service.DefaultBoardService;
+import bitcamp.myapp.service.DefaultProjectService;
+import bitcamp.myapp.service.DefaultUserService;
+import bitcamp.myapp.service.ProjectService;
+import bitcamp.myapp.service.UserService;
 import bitcamp.mybatis.SqlSessionFactoryProxy;
-import org.apache.ibatis.io.Resources;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.ibatis.session.SqlSessionFactoryBuilder;
-
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
-import java.io.InputStream;
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
 @WebListener // 서블릿 컨테이너에 이 클래스를 배치하는 태그다.
 public class ContextLoaderListener implements ServletContextListener {
@@ -43,14 +53,20 @@ public class ContextLoaderListener implements ServletContextListener {
 
       ServletContext ctx = sce.getServletContext();
       ctx.setAttribute("sqlSessionFactory", sqlSessionFactoryProxy);
-      ctx.setAttribute("userService", userService);
-      ctx.setAttribute("boardService", boardService);
-      ctx.setAttribute("projectService", projectService);
+
+      ctx.setAttribute("controllers", boardService);
+
+      List<Object> controllers = new ArrayList<>();
+      controllers.add(new UserController(userService));
+      controllers.add(new AuthController(userService));
+      controllers.add(new ProjectController(projectService, userService));
+      controllers.add(new BoardController(boardService, ctx));
+
+      ctx.setAttribute("controllers", controllers);
 
     } catch (Exception e) {
       System.out.println("서비스 객체 준비 중 오류 발생!");
       e.printStackTrace();
     }
   }
-
 }

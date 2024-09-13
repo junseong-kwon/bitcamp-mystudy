@@ -9,11 +9,14 @@ import {
   Dialog,
   DialogContent,
   Button,
+  Stack,
+  IconButton,
+  svgIcon,
 } from "@mui/material";
 
 // 프로필 카드 컴포넌트
 function ProfileCard({ seatNumber, name, imgSrc, status, isSelf, openModal }) {
-  const isOnline = status === "online";
+  const isOnline = status === "online" || isSelf;
   const showStatus = !isSelf; // 본인에게는 온라인/오프라인 상태 표시 안함
 
   return (
@@ -26,6 +29,7 @@ function ProfileCard({ seatNumber, name, imgSrc, status, isSelf, openModal }) {
         textAlign: "center",
         padding: "0px",
         margin: "0px",
+        height: "155px",
       }}
     >
       <CardContent>
@@ -37,17 +41,19 @@ function ProfileCard({ seatNumber, name, imgSrc, status, isSelf, openModal }) {
             backgroundColor: "#f7f7f7",
             alignItems: "center",
             position: "relative",
-            padding: "5px 0px",
+            padding: "0px 0px",
             marginLeft: "-16px",
             marginRight: "-16px",
             top: "-16px",
+            height: "35px",
           }}
         >
           <Typography
             sx={{
-              fontSize: "16px",
+              fontSize: "17px",
               fontWeight: "500",
               color: isOnline ? "#333" : "#b0b0b0", // 온라인: 진한 색, 오프라인: 회색
+              margin: "10px",
             }}
           >
             No. {seatNumber}
@@ -62,7 +68,9 @@ function ProfileCard({ seatNumber, name, imgSrc, status, isSelf, openModal }) {
                 color: "white",
                 fontSize: "14px",
                 borderRadius: "12px",
-                padding: "0 8px",
+                padding: "0 0px",
+                height: "20px",
+                marginRight: "10px",
               }}
             />
           )}
@@ -89,8 +97,8 @@ function ProfileCard({ seatNumber, name, imgSrc, status, isSelf, openModal }) {
           <Avatar
             sx={{
               marginTop: "5px",
-              width: "60px",
-              height: "60px",
+              width: "50px",
+              height: "50px",
               filter: isOnline ? "none" : "grayscale(100%)", // 오프라인: 흑백 필터
             }}
             src={imgSrc}
@@ -146,7 +154,15 @@ export default function StudentRoom() {
   };
 
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: "20px" }}>
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(5, 1fr)",
+        gap: "20px",
+        marginLeft: "250px",
+        marginRight: "100px",
+      }}
+    >
       {profiles.map((profile, index) => (
         <ProfileCard
           key={index}
@@ -166,18 +182,20 @@ export default function StudentRoom() {
             padding: "30px",
           }}
         >
+
           <Avatar
             src="https://via.placeholder.com/100"
             alt={`${currentProfile.name}'s profile`}
-            style={{ width: "80px", height: "80px", marginLeft: "63px" }}
+            style={{ width: "100px", height: "100px", marginLeft: "56px" }}
           />
           <Typography
             sx={{
               fontSize: "12px",
+              marginTop: "30px",
             }}
             variant="h6"
           >
-            <strong>이름:</strong> 
+            <strong>이름:</strong>
           </Typography>
           <Typography
             sx={{
@@ -246,7 +264,7 @@ export default function StudentRoom() {
             value={currentProfile.message}
             readOnly
             rows={4}
-            style={{ width: "100%", outline: "none" }}
+            style={{ width: "100%", height: "120px", outline: "none" }}
           />
         </DialogContent>
       </Dialog>

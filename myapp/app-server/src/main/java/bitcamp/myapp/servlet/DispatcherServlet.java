@@ -1,59 +1,77 @@
 package bitcamp.myapp.servlet;
 
+import bitcamp.myapp.annotation.RequestMapping;
+import java.io.IOException;
+import java.lang.reflect.Method;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.Enumeration;
 
 @MultipartConfig(
-        maxFileSize = 1024 * 1024 * 60,
-        maxRequestSize = 1024 * 1024 * 100)
+    maxFileSize = 1024 * 1024 * 60,
+    maxRequestSize = 1024 * 1024 * 100)
 @WebServlet("/app/*")
 public class DispatcherServlet extends HttpServlet {
 
-    @Override
-    protected void service(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        try {
-            req.getRequestDispatcher(req.getPathInfo()).include(req, res);
+  private List<Object> controllers;
 
-            Exception exception = (Exception) req.getAttribute("exception");
-            if (exception != null) {
-                throw exception;
-            }
+  @Override
+  public void init() throws ServletException {
+    controllers = (List<Object>) this.getServletContext().getAttribute("controllers");
+  }
 
-            // 쿠키 처리
-            Enumeration<String> attrNames = req.getAttributeNames();
-            while (attrNames.hasMoreElements()) {
-                Object attrValue = req.getAttribute(attrNames.nextElement());
-                if (attrValue instanceof Cookie) {
-                    res.addCookie((Cookie) attrValue);
-                }
+  @Override
+  protected void service(HttpServletRequest req, HttpServletResponse res)
+      throws ServletException, IOException {
+    try {
+      // 클라이언트가 요청한 URL을 가지고 페이지 컨트롤러와 요청핸들러(메서드)를 찾는다.
+      String controllerPath = req.getPathInfo();
 
-            }
+      Object pageController = null;
+      Method requestHandler = null;
 
-            String viewName = (String) req.getAttribute("viewName");
-            if (viewName == null) {
-                return;
-
-            } else if (viewName.startsWith("redirect:")) {
-                res.sendRedirect(viewName.substring(9));
-
-            } else {
-                String refresh = (String) req.getAttribute("refresh");
-                if (refresh != null) {
-                    res.setHeader("Refresh", refresh);
-                }
-                req.getRequestDispatcher(viewName).forward(req, res);
-            }
-
-        } catch (Exception e) {
-            req.getRequestDispatcher("/error.jsp").forward(req, res);
+      loop:
+      for (Object controller : controllers) {
+        Method[] methods = controller.getClass().getDeclaredMethods();
+        for (Method m : methods) {
+          RequestMapping requestMapping = m.getAnnotation(RequestMapping.class);
+          if (requestMapping == null || !requestMapping.value().equals(controllerPath)) {
+            continue;
+          }
+          requestHandler = m;
+          pageController = controller;
+          break loop;
         }
-    }
+      }
 
+      if (pageController == null) {
+        throw new Exception("해당 URL을 처리할 수 없습니다.");
+      }
+
+      if (requestHandler.getReturnType() == void.class) {
+        requestHandler.invoke(pageController, req, res);
+        return;
+      }
+
+      String viewName = (String) requestHandler.invoke(pageController, req, res);
+
+      if (viewName == null) {
+        return;
+
+      } else if (viewName.startsWith("redirect:")) {
+        res.sendRedirect(viewName.substring(9));
+
+      } else {
+        req.getRequestDispatcher(viewName).forward(req, res);
+      }
+
+    } catch (Exception e) {
+      req.setAttribute("exception", e);
+      req.getRequestDispatcher("/error.jsp").forward(req, res);
+    }
+  }
 }
