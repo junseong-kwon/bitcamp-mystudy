@@ -4,16 +4,6 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="UserDao">
 
-    <delete id="delete" parameterType="int">
-        delete from myapp_users
-        where user_id=#{no}
-    </delete>
-
-    <insert id="insert" parameterType="user">
-        insert into myapp_users(name, email, pwd, tel)
-        values (#{name}, #{email}, sha1(#{password}), #{tel})
-    </insert>
-
     <resultMap id="UserMap" type="user">
         <id column="user_id" property="no"/>
         <result column="name" property="name"/>
@@ -21,30 +11,6 @@
         <result column="pwd" property="password"/>
         <result column="tel" property="tel"/>
     </resultMap>
-
-    <select id="findBy" parameterType="int" resultMap="UserMap">
-        select
-            user_id,
-            name,
-            email,
-            tel
-        from
-            myapp_users
-        where
-            user_id=#{no}
-    </select>
-
-    <select id="findByEmailAndPassword" parameterType="map" resultMap="UserMap">
-        select
-            user_id,
-            name,
-            email,
-            tel
-        from
-            myapp_users
-        where
-            email=#{email} and pwd=sha1(#{password})
-    </select>
 
     <select id="list" resultMap="UserMap">
         select
@@ -57,6 +23,35 @@
             user_id asc
     </select>
 
+    <insert id="insert" parameterType="user">
+        insert into myapp_users(name, email, pwd, tel)
+        values (#{name}, #{email}, sha1(#{password}), #{tel})
+    </insert>
+
+    <select id="findBy" resultMap="UserMap" parameterType="int">
+        select
+            user_id,
+            name,
+            email,
+            tel
+        from
+            myapp_users
+        where
+            user_id=#{no}
+    </select>
+
+    <select id="findByEmailAndPassword" resultMap="UserMap" parameterType="map">
+        select
+            user_id,
+            name,
+            email,
+            tel
+        from
+            myapp_users
+        where
+            email=#{email} and pwd=sha1(#{password})
+    </select>
+
     <update id="update" parameterType="user">
         update myapp_users set
             name=#{name},
@@ -66,4 +61,9 @@
         where
             user_id=#{no}
     </update>
+
+    <delete id="delete" parameterType="int">
+        delete from myapp_users
+        where user_id=#{no}
+    </delete>
 </mapper>

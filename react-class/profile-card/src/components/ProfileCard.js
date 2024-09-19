@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import {
   Avatar,
   Card,
@@ -8,21 +9,20 @@ import {
   Chip,
   Dialog,
   DialogContent,
-  Button,
-  Stack,
-  IconButton,
-  svgIcon,
 } from "@mui/material";
 
 // 프로필 카드 컴포넌트
 function ProfileCard({ seatNumber, name, imgSrc, status, isSelf, openModal }) {
   const isOnline = status === "online" || isSelf;
+  const isOffline = status === "offline";
   const showStatus = !isSelf; // 본인에게는 온라인/오프라인 상태 표시 안함
+
+  const [hovered, setHovered] = useState(false); // 이미지 호버 상태 관리
 
   return (
     <Card
       sx={{
-        backgroundColor: isSelf, // 온라인: 흰색, 오프라인: 연한 회색
+        backgroundColor: isSelf ? "#ffffff" : "#f7f7f7",
         borderRadius: "10px",
         boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
         width: "200px",
@@ -100,10 +100,15 @@ function ProfileCard({ seatNumber, name, imgSrc, status, isSelf, openModal }) {
               width: "50px",
               height: "50px",
               filter: isOnline ? "none" : "grayscale(100%)", // 오프라인: 흑백 필터
+              transition: "transform 1s ease", // 호버 애니메이션 추가
+              transform: hovered ? "scale(1.1)" : "scale(1)", // 호버 시 이미지 확대
+              cursor: "pointer", // 클릭 가능한 상태를 나타내는 커서
             }}
             src={imgSrc}
             alt={`${name}'s profile`}
-            onClick={() => openModal(name)}
+            onMouseEnter={() => setHovered(true)} // 호버 시작
+            onMouseLeave={() => setHovered(false)} // 호버 종료
+            onClick={() => openModal(name)} // 클릭하면 모달 열기
           />
         </Badge>
 
@@ -128,14 +133,20 @@ function ProfileCard({ seatNumber, name, imgSrc, status, isSelf, openModal }) {
 export default function StudentRoom() {
   const [open, setOpen] = useState(false);
   const [currentProfile, setCurrentProfile] = useState({});
+  const [profiles, setProfiles] = useState([]);
 
-  // 가상 데이터 (25개의 자리)
-  const profiles = Array.from({ length: 25 }, (_, i) => ({
-    seatNumber: i + 1,
-    name: `사용자 ${i + 1}`,
-    status: i === 0 ? "self" : i % 2 === 0 ? "online" : "offline", // 본인은 첫 번째 자리, 나머지는 온라인/오프라인으로 구분
-  }));
-
+  // Axios로 서버에서 데이터를 가져오는 함수
+  useEffect(() => {
+    axios
+      .get("http://localhost:8081/api/seat/") // 백엔드 API 요청
+      .then((response) => {
+        console.log(response.data); // 브라우저 콘솔에서 데이터를 확인
+        setProfiles(response.data); // 받아온 데이터를 상태로 저장
+      })
+      .catch((error) => {
+        console.error("데이터를 불러오는 중 오류가 발생했습니다:", error);
+      });
+  }, []);
   // 모달 열기 함수
   const openProfileModal = (name) => {
     setCurrentProfile({
@@ -167,10 +178,10 @@ export default function StudentRoom() {
         <ProfileCard
           key={index}
           seatNumber={profile.seatNumber}
-          name={profile.name}
-          imgSrc={profile.imgSrc}
-          status={profile.status === "self" ? "self" : profile.status}
-          isSelf={profile.status === "self"} // 본인 여부 확인
+          name={profile.user ? profile.user.name : "빈 좌석"}
+          imgSrc={profile.user ? profile.user.profileImage.pictureUrl : ""}
+          status={profile.occupied ? "online" : "offline"}
+          isSelf={profile.isSelf} // 본인 여부 확인
           openModal={openProfileModal}
         />
       ))}
@@ -182,7 +193,6 @@ export default function StudentRoom() {
             padding: "30px",
           }}
         >
-
           <Avatar
             src="https://via.placeholder.com/100"
             alt={`${currentProfile.name}'s profile`}

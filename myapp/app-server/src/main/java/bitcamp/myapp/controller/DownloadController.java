@@ -1,23 +1,24 @@
 package bitcamp.myapp.controller;
 
 import bitcamp.myapp.annotation.RequestMapping;
+import bitcamp.myapp.annotation.RequestParam;
 import bitcamp.myapp.service.BoardService;
 import bitcamp.myapp.vo.AttachedFile;
 import bitcamp.myapp.vo.User;
+
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 public class DownloadController {
 
   private BoardService boardService;
   private Map<String, String> downloadPathMap = new HashMap<>();
-
 
   public DownloadController(BoardService boardService, ServletContext ctx) {
     this.boardService = boardService;
@@ -26,30 +27,30 @@ public class DownloadController {
     this.downloadPathMap.put("project", ctx.getRealPath("/upload/project"));
   }
 
-
   @RequestMapping("/download")
-  public void doGet(HttpServletRequest req, HttpServletResponse res)
-      throws Exception {
-
-    User loginUser = (User) ((HttpServletRequest) req).getSession().getAttribute("loginUser");
+  public void download(
+          @RequestParam("path") String path,
+          @RequestParam("fileNo") int fileNo,
+          HttpSession session,
+          HttpServletResponse res) throws Exception {
+    
+    User loginUser = (User) session.getAttribute("loginUser");
     if (loginUser == null) {
       throw new Exception("로그인 하지 않았습니다.");
     }
 
-    String path = req.getParameter("path");
     String downloadDir = downloadPathMap.get(path);
 
     if (path.equals("board")) {
-      int fileNo = Integer.parseInt(req.getParameter("fileNo"));
       AttachedFile attachedFile = boardService.getAttachedFile(fileNo);
 
       res.setHeader(
-          "Content-Disposition",
-          String.format("attachment; filename=\"%s\"", attachedFile.getOriginFilename())
+              "Content-Disposition",
+              String.format("attachment; filename=\"%s\"", attachedFile.getOriginFilename())
       );
 
       BufferedInputStream downloadFileIn = new BufferedInputStream(
-          new FileInputStream(downloadDir + "/" + attachedFile.getFilename()));
+              new FileInputStream(downloadDir + "/" + attachedFile.getFilename()));
       OutputStream out = res.getOutputStream();
 
       int b;
@@ -65,6 +66,6 @@ public class DownloadController {
     } else {
 
     }
-
   }
+
 }
