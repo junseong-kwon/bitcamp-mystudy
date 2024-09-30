@@ -1,59 +1,36 @@
 package bitcamp.myapp.controller;
 
 import bitcamp.myapp.service.BoardService;
+import bitcamp.myapp.service.StorageService;
 import bitcamp.myapp.vo.AttachedFile;
 import bitcamp.myapp.vo.Board;
 import bitcamp.myapp.vo.User;
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.client.builder.AwsClientBuilder;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpSession;
-import javax.servlet.http.Part;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
+
 @Controller
 public class BoardController {
 
-
-  private AmazonS3 s3;
   private BoardService boardService;
-  private String uploadDir;
-
-  @Value("${ncp.storage.bucketname}")
-  private String bucketName;
+  private StorageService storageService;
 
   private String folderName = "board/";
 
-  public BoardController(BoardService boardService,
-      ServletContext ctx,
-      @Value("${ncp.storage.endpoint}") String endPoint,
-      @Value("${ncp.storage.regionname}") String regionName,
-      @Value("${ncp.accesskey}") String accessKey,
-      @Value("${ncp.secretkey}") String secretKey) {
+  public BoardController(
+          BoardService boardService,
+          StorageService storageService) {
     this.boardService = boardService;
-    this.uploadDir = ctx.getRealPath("/upload/board");
-
-    // S3 client
-    this.s3 = AmazonS3ClientBuilder.standard()
-        .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(endPoint, regionName))
-        .withCredentials(
-            new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKey, secretKey)))
-        .build();
+    this.storageService = storageService;
   }
 
   @GetMapping("/board/form")
@@ -62,9 +39,9 @@ public class BoardController {
 
   @PostMapping("/board/add")
   public String add(
-      Board board,
-      MultipartFile[] files,
-      HttpSession session) throws Exception {
+          Board board,
+          MultipartFile[] files,
+          HttpSession session) throws Exception {
 
     User loginUser = (User) session.getAttribute("loginUser");
     if (loginUser == null) {
@@ -85,27 +62,13 @@ public class BoardController {
       attachedFile.setOriginFilename(file.getOriginalFilename());
 
       // 첨부 파일을 Object Storage에 올린다.
-      try {
-        // Object Storage에 업로드 할 콘텐트의 부가 정보를 설정한다.
-        ObjectMetadata objectMetadata = new ObjectMetadata();
-        objectMetadata.setContentType(file.getContentType()); // 콘텐트의 MIME Type 정보를 설정한다.
+      HashMap<String, Object> options = new HashMap<>();
+      options.put(StorageService.CONTENT_TYPE, file.getContentType());
+      storageService.upload(folderName + attachedFile.getFilename(),
+              file.getInputStream(),
+              options);
 
-        //Object Storage에 업로드 할 컨텐트의 요청 정보를 준비한다.
-        PutObjectRequest putObjectRequest = new PutObjectRequest(
-            bucketName, // 업로드 할 버킷 이름
-            folderName + attachedFile.getFilename(), //  업로드 파일의 경로(폴더 경로 포함)
-            file.getInputStream(), // 업로드 파일 데이터를 읽어 들일 입력스트림
-            objectMetadata //업로드 파일의 부가 정보
-        ).withCannedAcl(CannedAccessControlList.PublicRead);
-
-        s3.putObject(putObjectRequest);
-
-      } catch (Exception e) {
-        e.printStackTrace(); // 서버 콘솔 창에 예외 정보를 출력한 후 게시글 등록을 취소한다.
-        throw e;
-      }
-
-      attachedFiles.add(attachedFile); //문제가 없다면 파일 정보를 넘겨주면 된다./
+      attachedFiles.add(attachedFile);
     }
 
     board.setAttachedFiles(attachedFiles);
@@ -134,19 +97,18 @@ public class BoardController {
 
   @PostMapping("/board/update")
   public String update(
-      int no,
-      String title,
-      String content,
-      Part[] files,
-      HttpSession session) throws Exception {
+          int no,
+          String title,
+          String content,
+          Part[] files,
+          HttpSession session) throws Exception {
 
     User loginUser = (User) session.getAttribute("loginUser");
 
     Board board = boardService.get(no);
     if (board == null) {
       throw new Exception("없는 게시글입니다.");
-    } else if (loginUser == null
-        || loginUser.getNo() > 10 && board.getWriter().getNo() != loginUser.getNo()) {
+    } else if (loginUser == null || loginUser.getNo() > 10 && board.getWriter().getNo() != loginUser.getNo()) {
       throw new Exception("변경 권한이 없습니다.");
     }
 
@@ -164,7 +126,12 @@ public class BoardController {
       attachedFile.setFilename(UUID.randomUUID().toString());
       attachedFile.setOriginFilename(part.getSubmittedFileName());
 
-      part.write(this.uploadDir + "/" + attachedFile.getFilename());
+      // 첨부 파일을 Object Storage에 올린다.
+      HashMap<String, Object> options = new HashMap<>();
+      options.put(StorageService.CONTENT_TYPE, part.getContentType());
+      storageService.upload(folderName + attachedFile.getFilename(),
+              part.getInputStream(),
+              options);
 
       attachedFiles.add(attachedFile);
     }
@@ -177,23 +144,23 @@ public class BoardController {
 
   @GetMapping("/board/delete")
   public String delete(
-      int no,
-      HttpSession session) throws Exception {
+          int no,
+          HttpSession session) throws Exception {
 
     User loginUser = (User) session.getAttribute("loginUser");
     Board board = boardService.get(no);
 
     if (board == null) {
       throw new Exception("없는 게시글입니다.");
-    } else if (loginUser == null
-        || loginUser.getNo() > 10 && board.getWriter().getNo() != loginUser.getNo()) {
+    } else if (loginUser == null || loginUser.getNo() > 10 && board.getWriter().getNo() != loginUser.getNo()) {
       throw new Exception("삭제 권한이 없습니다.");
     }
 
     for (AttachedFile attachedFile : board.getAttachedFiles()) {
-      File file = new File(uploadDir + "/" + attachedFile.getFilename());
-      if (file.exists()) {
-        file.delete();
+      try {
+        storageService.delete(folderName + attachedFile.getFilename());
+      } catch (Exception e) {
+        System.out.printf("%s 파일 삭제 실패!\n", folderName + attachedFile.getFilename());
       }
     }
 
@@ -203,9 +170,9 @@ public class BoardController {
 
   @GetMapping("/board/file/delete")
   public String fileDelete(
-      HttpSession session,
-      int fileNo,
-      int boardNo) throws Exception {
+          HttpSession session,
+          int fileNo,
+          int boardNo) throws Exception {
 
     User loginUser = (User) session.getAttribute("loginUser");
     if (loginUser == null) {
@@ -222,9 +189,10 @@ public class BoardController {
       throw new Exception("삭제 권한이 없습니다.");
     }
 
-    File file = new File(uploadDir + "/" + attachedFile.getFilename());
-    if (file.exists()) {
-      file.delete();
+    try {
+      storageService.delete(folderName + attachedFile.getFilename());
+    } catch (Exception e) {
+      System.out.printf("%s 파일 삭제 실패!\n", folderName + attachedFile.getFilename());
     }
 
     boardService.deleteAttachedFile(fileNo);

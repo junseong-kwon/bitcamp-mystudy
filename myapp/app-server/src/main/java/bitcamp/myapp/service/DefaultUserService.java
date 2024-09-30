@@ -37,7 +37,7 @@ public class DefaultUserService implements UserService {
     return userDao.update(user);
   }
 
-  @Transactional
+  @Transactional()
   public boolean delete(int userNo) throws Exception {
     return userDao.delete(userNo);
   }
