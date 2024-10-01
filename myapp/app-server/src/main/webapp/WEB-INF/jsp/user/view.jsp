@@ -12,11 +12,11 @@
 <c:if test="${empty user}">
     <p>없는 회원입니다.</p>
 </c:if>
-
+https://gvmin3hi4942.edge.naverncp.com/rrjWxitDmb/user/${user.photo == null ? 'tkfka.jpg' : user.photo}type=f&w=100&h=100
 <c:if test="${not empty user}">
     <form action='update' method="post" enctype="multipart/form-data">
-        <a href="https://kr.object.ncloudstorage.com/bitcamp-bucket78/user/${user.photo}">
-            <img src="https://gvmin3hi4942.edge.naverncp.com/rrjWxitDmb/user/f34aa099-a0af-424b-9d7f-3069ed2dde4c?type=f&w=100&h=100&align=4">
+        <a href="https://kr.object.ncloudstorage.com/bitcamp-bucket78/user/${user.photo == null ? 'tkfka.jpg' : user.photo}">
+            <img src="https://gvmin3hi4942.edge.naverncp.com/rrjWxitDmb/user/${user.photo == null ? 'tkfka.jpg' : user.photo}type=f&w=100&h=100">
         </a><input name="file" type="file"><br>
         번호: <input name='no' readonly type='text' value='${user.no}'><br>
         이름: <input name='name' type='text' value='${user.name}'><br>
